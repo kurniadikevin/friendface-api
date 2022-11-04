@@ -3,11 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
+const bcrypt =require('bcryptjs');
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 
+// router import
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+//var commentsRouter = require('./routes/comments');
+var postsRouter =  require('./routes/posts');
 
 var app = express();
+app.use(cors());
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
@@ -28,8 +37,66 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//passport local strategy method
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username }, (err, user) => {
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          // passwords match! log user in
+          return done(null, user)
+        }
+         else {
+          // passwords do not match!
+          return done(null, false, { message: "Incorrect password" })
+        }
+      })
+    });
+  })
+);
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+//user authentication and sign up
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
+
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
+
+
+// router use
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/posts', postsRouter);
+//app.use('/comments', commentRouter);
+
+
+//LOGIN on app
+app.post(
+  "/users/log-in",
+  passport.authenticate("local", {
+    //successRedirect: "https://cmsblackboardjournal.vercel.app/",
+    //failureRedirect: "https://cmsblackboardjournal.vercel.app/",
+    passReqToCallback: true
+  }), (req, res)=>{
+    // If you use "Content-Type": "application/json"
+    // req.isAuthenticated is true if authentication was success else it is false
+    res.json({auth: req.isAuthenticated()});
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
