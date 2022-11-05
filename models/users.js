@@ -7,7 +7,8 @@ const UserSchema= new Schema({
     username : {type : String, default: 'Not Set'},
     email : {type : String , required:true},
     password : { type: String, required: true},
-    friends : { type:Array , default: [] } 
+    friends : { type:Array , default: [] },
+    profilePicture : {type:String }
 })
 
 //virtual user url
