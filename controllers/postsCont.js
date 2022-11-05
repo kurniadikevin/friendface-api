@@ -12,8 +12,26 @@ exports.post_list = (req, res,next) => {
       }
       //Successful, so render
      res.send(post_list);
-     res.redirect('http://localhost:3000/')
+    
     });
   };
+
+  //GET specific post
+
+
+  //POST create new post 
+  exports.create_new_post= (req,res,next)=>{
+
+    const posts = new Post({
+        text : req.body.text,
+        
+    })
+    posts.save(err=>{
+      if(err){
+        return next(err);
+      }
+    })
+    res.redirect('http://localhost:3000/')
+  }
 
   

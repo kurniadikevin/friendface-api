@@ -40,8 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //passport local strategy method
 passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne({ username: username }, (err, user) => {
+  new LocalStrategy((email, password, done) => {
+    User.findOne({ email: username }, (err, user) => {
       bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
           // passwords match! log user in
@@ -72,11 +72,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
+
+//assign current user
 app.use(function(req, res, next) {
   res.locals.currentUser = req.user;
   next();
 });
-
 
 // router use
 app.use('/', indexRouter);
@@ -85,17 +86,19 @@ app.use('/posts', postsRouter);
 //app.use('/comments', commentRouter);
 
 
+
 //LOGIN on app
 app.post(
-  "/users/log-in",
+  "/users/login",
   passport.authenticate("local", {
-    //successRedirect: "https://cmsblackboardjournal.vercel.app/",
-    //failureRedirect: "https://cmsblackboardjournal.vercel.app/",
+    /* successRedirect: "http://localhost:3000/",
+    failureRedirect: "http://localhost:3000/login",  */
     passReqToCallback: true
   }), (req, res)=>{
     // If you use "Content-Type": "application/json"
     // req.isAuthenticated is true if authentication was success else it is false
     res.json({auth: req.isAuthenticated()});
+    //res.send('login sucessful')
 });
 
 // catch 404 and forward to error handler
