@@ -52,6 +52,8 @@ passport.use(
   },
     (email, password, done) => {
     User.findOne({ email: email }, (err, user) => {
+      if (err) throw err;
+      if (!user) return done(null, false);
       bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
           // passwords match! log user in
@@ -72,12 +74,9 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
   User.findById({_id: id}, function(err, user) {
-    const userInformation = {
-      username: user.username,
-    };
-    cb(err, userInformation);
+    done(err, user);
   });
-  });
+});
 
 //user authentication and sign up
 app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
@@ -100,24 +99,8 @@ app.use('/posts', postsRouter);
 
 //testing get users/login
 app.get('/users/login',(req,res)=>{
-  res.send('login get loaded')
+  res.json('login get loaded')
 })
-
-//LOGIN on app
-/* app.post(
-  "/users/login",
-  passport.authenticate("local", {
-      // successRedirect: "http://localhost:3000/",
-    //failureRedirect: "http://localhost:3000/login",   
-    passReqToCallback: true
-  }) , (req, res)=>{
-    // If you use "Content-Type": "application/json"
-    // req.isAuthenticated is true if authentication was success else it is false
-    res.json({auth: req.isAuthenticated()});
-    console.log('login sucessful')
-} 
-); */
-
 
 app.post("/users/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -127,12 +110,15 @@ app.post("/users/login", (req, res, next) => {
       req.logIn(user, (err) => {
         if (err) throw err;
         res.send(req.user);
-        
-        console.log(req.user);
       });
     }
   })(req, res, next);
 });
+
+app.get('/currentUser',(req,res,next)=>{
+  res.send(req.user)
+ 
+})
 
 
 // catch 404 and forward to error handler

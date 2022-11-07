@@ -24,7 +24,6 @@ exports.post_list = (req, res,next) => {
 
     const posts = new Post({
         text : req.body.text,
-        
     })
     posts.save(err=>{
       if(err){
