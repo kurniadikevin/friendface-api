@@ -9,6 +9,9 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
+//import model
+const User = require('./models/users');
+
 // router import
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,7 +19,10 @@ var usersRouter = require('./routes/users');
 var postsRouter =  require('./routes/posts');
 
 var app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000", // <-- location of the react app were connecting to
+  credentials: true,
+}));
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
@@ -40,8 +46,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //passport local strategy method
 passport.use(
-  new LocalStrategy((email, password, done) => {
-    User.findOne({ email: username }, (err, user) => {
+  new LocalStrategy({
+    usernameField : 'email',
+    passwordField : 'password'
+  },
+    (email, password, done) => {
+    User.findOne({ email: email }, (err, user) => {
       bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
           // passwords match! log user in
@@ -61,13 +71,16 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
+  User.findById({_id: id}, function(err, user) {
+    const userInformation = {
+      username: user.username,
+    };
+    cb(err, userInformation);
   });
-});
+  });
 
 //user authentication and sign up
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
@@ -85,21 +98,42 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 //app.use('/comments', commentRouter);
 
-
+//testing get users/login
+app.get('/users/login',(req,res)=>{
+  res.send('login get loaded')
+})
 
 //LOGIN on app
-app.post(
+/* app.post(
   "/users/login",
   passport.authenticate("local", {
-    /* successRedirect: "http://localhost:3000/",
-    failureRedirect: "http://localhost:3000/login",  */
+      // successRedirect: "http://localhost:3000/",
+    //failureRedirect: "http://localhost:3000/login",   
     passReqToCallback: true
-  }), (req, res)=>{
+  }) , (req, res)=>{
     // If you use "Content-Type": "application/json"
     // req.isAuthenticated is true if authentication was success else it is false
     res.json({auth: req.isAuthenticated()});
-    //res.send('login sucessful')
+    console.log('login sucessful')
+} 
+); */
+
+
+app.post("/users/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) throw err;
+    if (!user) res.send("No User Exists");
+    else {
+      req.logIn(user, (err) => {
+        if (err) throw err;
+        res.send(req.user);
+        
+        console.log(req.user);
+      });
+    }
+  })(req, res, next);
 });
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
