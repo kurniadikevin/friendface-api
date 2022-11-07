@@ -24,13 +24,15 @@ exports.post_list = (req, res,next) => {
 
     const posts = new Post({
         text : req.body.text,
+        author : req.body.email
     })
     posts.save(err=>{
       if(err){
         return next(err);
       }
+     
     })
-    res.redirect('http://localhost:3000/')
+   
   }
 
   

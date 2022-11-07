@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
     text : {type: String,  },
-    author : { type : Schema.Types.ObjectId, ref : "User", default: 'randomPeople'},
+    author : { type : String, required : true},
     date :  { type: Date, default: Date.now },
     likes : { type: Number, default: 0},
     comment : { type : Schema.Types.ObjectId, ref : "Comment" },
