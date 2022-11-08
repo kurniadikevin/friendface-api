@@ -16,7 +16,20 @@ exports.post_list = (req, res,next) => {
     });
   };
 
-  //GET specific post
+  //GET user post
+  exports.user_post_list= (req,res,next)=>{
+    Post.find({ author : req.params.email}, "")
+    .sort({ date: -1 })
+    .populate("comment")
+    .exec(function (err, post_list) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+     res.send(post_list);
+    
+    });
+  }
 
 
   //POST create new post 

@@ -8,8 +8,7 @@ router.get('/',posts_controller.post_list);
 //create new post
 router.post('/newpost',posts_controller.create_new_post);
 
-/* router.get('/newpost',(req,res)=>{
-    res.send(req.user)
-}) */
+//get  profile user post
+router.get('/:email', posts_controller.user_post_list)
 
 module.exports = router;

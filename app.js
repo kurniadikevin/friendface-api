@@ -9,14 +9,22 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
+const multer = require('multer');
+var fs = require('fs');
+
 //import model
 const User = require('./models/users');
+const imgModel = require('./models/images');
+
 
 // router import
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//var commentsRouter = require('./routes/comments');
 var postsRouter =  require('./routes/posts');
+//var imagesRouter = require('./routes/images');
+//var commentsRouter = require('./routes/comments');
+
+
 
 var app = express();
 app.use(cors({
@@ -95,6 +103,7 @@ app.use(function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
+//app.use('/images', imagesRouter);
 //app.use('/comments', commentRouter);
 
 //testing get users/login
@@ -120,7 +129,54 @@ app.get('/currentUser',(req,res,next)=>{
  
 })
 
+/* <-----------multer for image management-----------------> */
+ var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now())
+  }
+});
 
+var upload = multer({ storage: storage });
+
+//get all images in upload
+app.get('/images', (req, res) => {
+  imgModel.find({}, (err, items) => {
+      if (err) {
+          console.log(err);
+          res.status(500).send('An error occurred', err);
+      }
+      else {
+          res.render('imagesPage', { items: items });
+      }
+  });
+});
+
+// post images upload
+app.post('/images', upload.single('image'), (req, res, next) => {
+  
+  var obj = {
+      name: req.body.name,
+      desc: req.body.desc,
+      img: {
+          data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+          contentType: 'image/png'
+      }
+  }
+  imgModel.create(obj, (err, item) => {
+      if (err) {
+          console.log(err);
+      }
+      else {
+           //item.save();
+          res.redirect('/images');
+      }
+  });
+}); 
+
+/* <-------------- ERROR HANDLING ----------> */
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

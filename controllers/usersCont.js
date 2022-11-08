@@ -29,9 +29,26 @@ exports.post_new_user=((req,res,next)=>{
       if (err) { 
         return next(err);
       }
-      res.redirect("http://localhost:3000/");
+      res.redirect("http://localhost:3000/login");
       });
     })
   }
 )
 
+ // put update user username
+exports.put_update_username = ((req,res)=>{
+  const user = new User({
+    username : req.body.username,
+    _id : req.body._id
+  })
+  User.findByIdAndUpdate(req.params.userId,user,{},(err, post) => {
+    if (err) {
+      return next(err);
+    }
+    // Successful: redirect to new product record.
+    console.log('updated')
+    res
+      .status(200)  
+      .end();
+  });
+});

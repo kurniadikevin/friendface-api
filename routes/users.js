@@ -15,4 +15,7 @@ router.get('/test',(req,res)=>{
 router.post('/signup',users_controller.post_new_user);
 
 
+//PUT update user username
+router.post('/update/:userId',users_controller.put_update_username)
+
 module.exports = router;
