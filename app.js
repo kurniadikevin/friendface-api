@@ -106,7 +106,8 @@ app.use('/posts', postsRouter);
 //app.use('/images', imagesRouter);
 //app.use('/comments', commentRouter);
 
-//testing get users/login
+
+/* <-----------LOGIN USER SECTION ----------------------------------> */
 app.get('/users/login',(req,res)=>{
   res.json('login get loaded')
 })
@@ -130,7 +131,7 @@ app.get('/currentUser',(req,res,next)=>{
 })
 
 /* <-----------multer for image management-----------------> */
- var storage = multer.diskStorage({
+  var storage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, 'uploads')
   },
@@ -175,6 +176,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
       }
   });
 }); 
+
 
 /* <-------------- ERROR HANDLING ----------> */
 // catch 404 and forward to error handler

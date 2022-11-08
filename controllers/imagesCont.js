@@ -1,6 +1,7 @@
 const imgModel = require('../models/images');
 const multer = require('multer');
 var fs = require('fs');
+var path = require('path');
 
 /* <-----------multer for image management-----------------> */
 var storage = multer.diskStorage({
@@ -27,7 +28,7 @@ exports.get_all_image=(req, res) => {
   });
 }
 
-exports.post_upload_image = upload.single('image'), (req, res, next) => {
+exports.post_upload_image = (upload.single('image'), (req, res, next) => {
     var obj = {
         name: req.body.name,
         desc: req.body.desc,
@@ -41,8 +42,8 @@ exports.post_upload_image = upload.single('image'), (req, res, next) => {
             console.log(err);
         }
         else {
-             item.save();
-            res.redirect('http://localhost:5000/');
+             //item.save();
+            res.redirect('/');
         }
     });
-  }
+  })
