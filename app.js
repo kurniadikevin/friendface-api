@@ -159,6 +159,7 @@ app.get('/images', (req, res) => {
 app.post('/images', upload.single('image'), (req, res, next) => {
   
   var obj = {
+      byUser : req.body.byUser,
       name: req.body.name,
       desc: req.body.desc,
       img: {
@@ -172,10 +173,28 @@ app.post('/images', upload.single('image'), (req, res, next) => {
       }
       else {
            //item.save();
-          res.redirect('/images');
+          res.redirect('http://localhost:3000/profile');
       }
   });
 }); 
+
+//get profile image
+//get all images in upload
+app.get('/images/:email', (req, res) => {
+  imgModel.find({ byUser : req.params.email}
+    , (err, items) => {
+      if (err) {
+          console.log(err);
+          res.status(500).send('An error occurred', err);
+      }
+       {
+         res.json(
+          (items[items.length-1]).img.data.toString('base64')
+         )
+         //res.render('imagesPage', { items: items });
+      }
+  });
+});
 
 
 /* <-------------- ERROR HANDLING ----------> */
