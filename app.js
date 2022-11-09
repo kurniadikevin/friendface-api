@@ -130,8 +130,8 @@ app.get('/currentUser',(req,res,next)=>{
  
 })
 
-/* <-----------multer for image management-----------------> */
-  var storage = multer.diskStorage({
+/* <-----------multer for image models management-----------------> */
+   var storage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, 'uploads')
   },
@@ -179,7 +179,6 @@ app.post('/images', upload.single('image'), (req, res, next) => {
 }); 
 
 //get profile image
-//get all images in upload
 app.get('/images/:email', (req, res) => {
   imgModel.find({ byUser : req.params.email}
     , (err, items) => {
@@ -187,12 +186,12 @@ app.get('/images/:email', (req, res) => {
           console.log(err);
           res.status(500).send('An error occurred', err);
       }
-       {
+      {
          res.json(
-          (items[items.length-1]).img.data.toString('base64')
+           (items[items.length-1]).img.data.toString('base64') 
          )
          //res.render('imagesPage', { items: items });
-      }
+      } 
   });
 });
 

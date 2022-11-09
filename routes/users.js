@@ -18,4 +18,7 @@ router.post('/signup',users_controller.post_new_user);
 //PUT update user username
 router.post('/update/:userId',users_controller.put_update_username)
 
+//PUT update user profilePicure
+router.post('/update/profilePicture/:userId',users_controller.put_update_user_profilePicture)
+
 module.exports = router;

@@ -52,3 +52,22 @@ exports.put_update_username = ((req,res)=>{
       .end();
   });
 });
+
+
+//put update user profilePicture 
+exports.put_update_user_profilePicture = ((req,res)=>{
+  const user = new User({
+    profilePicture : req.body.profilePicture,
+    _id : req.body._id
+  })
+  User.findByIdAndUpdate(req.params.userId,user,{},(err, post) => {
+    if (err) {
+      return next(err);
+    }
+    // Successful: redirect to new product record.
+    console.log('updated')
+    res
+      .status(200)  
+      .end();
+  });
+});

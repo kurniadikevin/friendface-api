@@ -3,6 +3,7 @@ const multer = require('multer');
 var fs = require('fs');
 var path = require('path');
 
+
 /* <-----------multer for image management-----------------> */
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -30,6 +31,7 @@ exports.get_all_image=(req, res) => {
 
 exports.post_upload_image = (upload.single('image'), (req, res, next) => {
     var obj = {
+        byUser : req.body.byUser,
         name: req.body.name,
         desc: req.body.desc,
         img: {
@@ -43,7 +45,23 @@ exports.post_upload_image = (upload.single('image'), (req, res, next) => {
         }
         else {
              //item.save();
-            res.redirect('/');
+             res.redirect('http://localhost:3000/profile');
         }
     });
   })
+
+exports.get_user_profileImage = (req, res) => {
+    imgModel.find({ byUser : req.params.email}
+      , (err, items) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('An error occurred', err);
+        }
+         {
+           res.json(
+            (items[items.length-1]).img.data.toString('base64')
+           )
+           //res.render('imagesPage', { items: items });
+        }
+    });
+  };
