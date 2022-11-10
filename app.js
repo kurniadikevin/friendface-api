@@ -176,7 +176,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
   
   var userImgUrl = new User({
     _id : req.body._id,
-    profilePicture : (path.join('http://localhost:5000' + '/' + req.file.filename))
+    profilePicture :  req.file.filename
   })
 
   imgModel.create(obj, (err, item) => {
