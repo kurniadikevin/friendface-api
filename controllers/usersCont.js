@@ -1,5 +1,9 @@
 const User = require('../models/users');
 const bcrypt =require('bcryptjs');
+require('dotenv').config();
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook');
+
 
 //get user all
 exports.get_user_all = (req,res,next)=>{
@@ -13,6 +17,7 @@ exports.get_user_all = (req,res,next)=>{
         res.send(user_list)
     })
 }
+
 
 //post create new user Sign-up
 exports.post_new_user=((req,res,next)=>{
@@ -71,3 +76,5 @@ exports.put_update_user_profilePicture = ((req,res)=>{
       .end();
   });
 });
+
+/* <------------------------FACEBOOK SIGN UP AND SIGN IN ------------------> */

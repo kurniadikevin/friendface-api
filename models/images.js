@@ -5,6 +5,7 @@ var imageSchema = new mongoose.Schema({
     name: String,
     desc: String,
     byUser : String,
+    url : String,
     img:
     {
         data: Buffer,

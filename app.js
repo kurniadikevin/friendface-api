@@ -9,6 +9,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
+
 const multer = require('multer');
 var fs = require('fs');
 
@@ -51,6 +52,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//make static file for images uploads
+app.use(express.static('uploads'))
 
 //passport local strategy method
 passport.use(
@@ -136,7 +139,7 @@ app.get('/currentUser',(req,res,next)=>{
       cb(null, 'uploads')
   },
   filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now())
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
 });
 
@@ -162,20 +165,39 @@ app.post('/images', upload.single('image'), (req, res, next) => {
       byUser : req.body.byUser,
       name: req.body.name,
       desc: req.body.desc,
+      url : (path.join(__dirname + '/uploads/' + req.file.filename)),
       img: {
           data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
           contentType: 'image/png'
       }
   }
+  
+  /* console.log(fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename))) */
+  
+  var userImgUrl = new User({
+    _id : req.body._id,
+    profilePicture : (path.join('http://localhost:5000' + '/' + req.file.filename))
+  })
+
   imgModel.create(obj, (err, item) => {
       if (err) {
           console.log(err);
       }
       else {
-           //item.save();
-          res.redirect('http://localhost:3000/profile');
+        console.log('update user')
+        User.findByIdAndUpdate(req.body._id, userImgUrl,{}, (err, item) => {
+          if (err) {
+              console.log(err);
+          }
+          else {
+               //item.save();
+               console.log('updated')
+              res.redirect('http://localhost:3000/profile');
+          }
+      }); 
       }
   });
+ 
 }); 
 
 //get profile image
