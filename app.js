@@ -200,7 +200,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
  
 }); 
 
-//get profile image
+//get profile image 
 app.get('/images/:email', (req, res) => {
   imgModel.find({ byUser : req.params.email}
     , (err, items) => {

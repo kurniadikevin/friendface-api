@@ -1,3 +1,4 @@
+const posts = require('../models/posts');
 const Post = require('../models/posts');
 const User = require('../models/users');
 
@@ -37,7 +38,6 @@ exports.post_list = (req, res,next) => {
   //POST create new post 
   exports.create_new_post= (req,res,next)=>{
 
-
     const posts = new Post({
         text : req.body.text,
         author : req.body.authorId
@@ -46,9 +46,19 @@ exports.post_list = (req, res,next) => {
       if(err){
         return next(err);
       }
-     
     })
-   
   }
 
-  
+   //update like on post
+  exports.update_post_likes = ((req,res,next)=>{
+    posts.findByIdAndUpdate(req.params.postId,{$push : {likes : req.body.likeBy}},
+      (err,post)=>{
+      if(err){
+        return next(err);
+      }
+      console.log('likes updated')
+      res
+        .status(200)
+        .end()
+    });
+  }); 

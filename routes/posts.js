@@ -9,6 +9,9 @@ router.get('/',posts_controller.post_list);
 router.post('/newpost',posts_controller.create_new_post);
 
 //get  profile user post
-router.get('/:userId', posts_controller.user_post_list)
+router.get('/:userId', posts_controller.user_post_list);
+
+// post like post
+router.post('/likes/:postId',posts_controller.update_post_likes); 
 
 module.exports = router;
