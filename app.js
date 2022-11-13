@@ -23,7 +23,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var postsRouter =  require('./routes/posts');
 //var imagesRouter = require('./routes/images');
-//var commentsRouter = require('./routes/comments');
+var commentsRouter = require('./routes/comments');
 
 
 
@@ -107,7 +107,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 //app.use('/images', imagesRouter);
-//app.use('/comments', commentRouter);
+app.use('/comments',commentsRouter);
 
 
 /* <-----------LOGIN USER SECTION ----------------------------------> */

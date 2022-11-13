@@ -8,14 +8,10 @@ const PostSchema = new Schema({
     author :  { type : Schema.Types.ObjectId, ref : "User" },
     date :  { type: Date, default: Date.now },
     likes : { type: Array , default: []},
-    comment : { type : Schema.Types.ObjectId, ref : "Comment" },
+    comment : { type : Array, default : [] },
   /*  content : {} */
 });
 
-/* //virtual post url
-PostSchema.virtual("url").get(function(){
-    return `/posts/${this._id}`;
-}) */
 
 module.exports= mongoose.model("Post",PostSchema)
 

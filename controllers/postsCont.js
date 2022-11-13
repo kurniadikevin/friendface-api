@@ -1,4 +1,3 @@
-const posts = require('../models/posts');
 const Post = require('../models/posts');
 const User = require('../models/users');
 
@@ -51,7 +50,7 @@ exports.post_list = (req, res,next) => {
 
    //update like on post
   exports.update_post_likes = ((req,res,next)=>{
-    posts.findByIdAndUpdate(req.params.postId,{$push : {likes : req.body.likeBy}},
+    Post.findByIdAndUpdate(req.params.postId,{$push : {likes : req.body.likeBy}},
       (err,post)=>{
       if(err){
         return next(err);
