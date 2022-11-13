@@ -40,6 +40,18 @@ exports.post_new_user=((req,res,next)=>{
   }
 )
 
+//get user detail by id
+exports.get_user_detail =(req,res,next)=>{
+  User.find({ _id : req.params.userId},'')
+  .exec(function(err,user_list){
+      if(err){
+          return next(err);
+      }
+      //sucess
+      res.send(user_list)
+  })
+}
+
  // put update user username
 exports.put_update_username = ((req,res)=>{
   const user = new User({

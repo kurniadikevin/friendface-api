@@ -14,6 +14,9 @@ router.get('/test',(req,res)=>{
 //POST create new user
 router.post('/signup',users_controller.post_new_user);
 
+// GET user detail
+router.get('/:userId', users_controller.get_user_detail);
+
 
 //PUT update user username
 router.post('/update/:userId',users_controller.put_update_username)
