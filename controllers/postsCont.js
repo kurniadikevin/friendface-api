@@ -12,9 +12,38 @@ exports.post_list = (req, res,next) => {
         return next(err);
       }
       //Successful, so render
-     res.send(post_list);
-    
+     res.send(post_list);  
     });
+  };
+
+  //get display all friend post
+  exports.post_list_friends = (req, res,next) => {
+
+    User.find({ _id : req.params.userId},'')
+    .exec(function(err,user_list){
+        if(err){
+            return next(err);
+        }
+        // find post that author is equal to friend email
+        let queryList = (user_list[0].friends).map((friend)=>{
+          return { 'email' : friend.email}
+          });
+
+        Post.find({ 
+           $or : queryList
+        }, "")
+        .sort({ date: -1 })
+        .populate("comment")
+        .populate('author')
+        .exec(function (err, post_list) {
+          if (err) {
+            return next(err);
+          }
+          //Successful, so render
+         res.send(post_list);
+        
+        });
+    })
   };
 
   //GET user post
