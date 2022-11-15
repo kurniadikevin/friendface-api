@@ -26,11 +26,11 @@ exports.post_list = (req, res,next) => {
         }
         // find post that author is equal to friend email
         let queryList = (user_list[0].friends).map((friend)=>{
-          return { 'email' : friend.email}
+          return { 'author' : friend}
           });
 
         Post.find({ 
-           $or : queryList
+          $or: [ {$or : queryList}, { 'author' : req.params.userId}]
         }, "")
         .sort({ date: -1 })
         .populate("comment")
