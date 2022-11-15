@@ -5,8 +5,6 @@ const users_controller= require('../controllers/usersCont');
 /* GET users listing. */
 router.get('/', users_controller.get_user_all);
 
-
-
 //test
 router.get('/recent',users_controller.get_new_user);
 
@@ -21,6 +19,15 @@ router.get('/:userId', users_controller.get_user_detail);
 router.post('/update/:userId',users_controller.put_update_username)
 
 //PUT update user profilePicure
-router.post('/update/profilePicture/:userId',users_controller.put_update_user_profilePicture)
+router.post('/update/profilePicture/:userId',users_controller.put_update_user_profilePicture);
+
+//POST make friend request
+router.post('/friendRequest/:userId',users_controller.post_user_friend_request);
+
+//POST accept friend request
+router.post('/friendRequest/accept/:userId',users_controller.post_accept_friend_request);
+
+//POST decline friend request
+router.post('/friendRequest/decline/:userId',users_controller.post_decline_friend_request);
 
 module.exports = router;

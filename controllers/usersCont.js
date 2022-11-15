@@ -13,7 +13,7 @@ exports.get_user_all = (req,res,next)=>{
         if(err){
             return next(err);
         }
-        //sucess
+        //success
         res.send(user_list)
     })
 }
@@ -102,5 +102,69 @@ exports.put_update_user_profilePicture = ((req,res)=>{
       .end();
   });
 });
+
+// send friend request
+exports.post_user_friend_request= ((req,res,next)=>{
+  User.findByIdAndUpdate(req.params.userId,{$push : {friendRequest : req.body.requestData}},
+    (err,post)=>{
+    if(err){
+      return next(err);
+    }
+    console.log('friend request send')
+    res
+      .status(200)
+      .end()
+  });
+})
+
+//post accept friend request
+exports.post_accept_friend_request=((req,res,next)=>{
+  //remove friend request
+  User.findByIdAndUpdate(req.params.userId,{$pull : {friendRequest : req.body.requestData}},
+    (err,post)=>{
+    if(err){
+      return next(err);
+    } else{
+    console.log('friend request removed')
+
+   //add friend list to receiver
+  User.findByIdAndUpdate(req.params.userId,{$push : {friends : req.body.newFriend}},
+    (err,post)=>{
+    if(err){
+      return next(err);
+    } else{
+    console.log('friend list added to receiver');
+
+    //add friend list to sender
+  User.findByIdAndUpdate(req.body.newFriend._id,{$push : {friends : req.body.newFriendReceiver}},
+      (err,post)=>{
+      if(err){
+        return next(err);
+      }
+      console.log('friend list added to sender');
+      res
+        .status(200)
+        .end()
+    });
+   } 
+  });
+  }
+  });
+  
+})
+
+//post decline friend request
+exports.post_decline_friend_request=((req,res,next)=>{
+  //remove friend request
+  User.findByIdAndUpdate(req.params.userId,{$pull : {friendRequest : req.body.requestData}},
+    (err,post)=>{
+    if(err){
+      return next(err);
+    }
+    console.log('friend request decline')
+  })
+})
+
+
 
 /* <------------------------FACEBOOK SIGN UP AND SIGN IN ------------------> */
