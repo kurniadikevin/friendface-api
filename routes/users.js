@@ -1,4 +1,5 @@
 var express = require('express');
+var passport = require('passport')
 var router = express.Router();
 const users_controller= require('../controllers/usersCont');
 
@@ -29,5 +30,27 @@ router.post('/friendRequest/accept/:userId',users_controller.post_accept_friend_
 
 //POST decline friend request
 router.post('/friendRequest/decline/:userId',users_controller.post_decline_friend_request);
+
+// facebook auth router
+router.get("/auth/facebook", passport.authenticate("facebook"));
+
+router.get(
+    "/auth/facebook/callback",
+    passport.authenticate("facebook", {
+       successRedirect: "/success",
+      failureRedirect: "/fail" 
+      
+    })
+  );
+
+  router.get("/fail", (req, res) => {
+    res.send("Failed attempt");
+  });
+  
+  router.get("/success", (req, res) => {
+    res.send("Success");
+  });
+
+
 
 module.exports = router;

@@ -9,6 +9,8 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
+var FacebookStrategy = require('passport-facebook');
+var json= require('body-parser');
 
 const multer = require('multer');
 var fs = require('fs');
@@ -160,7 +162,6 @@ app.get('/images', (req, res) => {
 
 // post images upload
 app.post('/images', upload.single('image'), (req, res, next) => {
-  
   var obj = {
       byUser : req.body.byUser,
       name: req.body.name,
@@ -170,15 +171,12 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
           contentType: 'image/png'
       }
-  }
-  
-  /* console.log(fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename))) */
+  }/* console.log(fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename))) */
   
   var userImgUrl = new User({
     _id : req.body._id,
     profilePicture :  req.file.filename
   })
-
   imgModel.create(obj, (err, item) => {
       if (err) {
           console.log(err);
@@ -197,7 +195,6 @@ app.post('/images', upload.single('image'), (req, res, next) => {
       }); 
       }
   });
- 
 }); 
 
 //get profile image 
