@@ -21,7 +21,7 @@ exports.get_user_all = (req,res,next)=>{
 //get top 10 new user
 exports.get_new_user = (req,res,next)=>{
   User.find({},'')
-  .sort({ date : -1})
+  .sort({ friends : -1})
   .limit(5)
   .exec(function(err,user_list){
       if(err){
