@@ -166,34 +166,3 @@ exports.post_decline_friend_request=((req,res,next)=>{
 })
 
 
-
-/* <------------------------FACEBOOK AUTHENTICATION ------------------> */
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById({_id: id}, function(err, user) {
-    done(err, user);
-  });
-});
-
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: '850497516091970',
-      clientSecret: '807dd045cfe818cbed92be02cd230e5d',
-      callbackURL: 'http://localhost:5000/users/auth/facebook/calllback',
-      profileFields: ["email", "username"]
-    },
-    function(accessToken, refreshToken, profile, done) {
-      const { email, first_name, last_name } = profile._json;
-      const userData =  new User({
-        email,
-        username : first_name +' '+ last_name
-      });
-     (userData).save();
-      done(null, profile);
-    }
-  )
-);

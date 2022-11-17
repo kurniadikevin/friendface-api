@@ -31,26 +31,37 @@ router.post('/friendRequest/accept/:userId',users_controller.post_accept_friend_
 //POST decline friend request
 router.post('/friendRequest/decline/:userId',users_controller.post_decline_friend_request);
 
-// facebook auth router
-router.get("/auth/facebook", passport.authenticate("facebook"));
 
-router.get(
-    "/auth/facebook/callback",
-    passport.authenticate("facebook", {
-       successRedirect: "/success",
-      failureRedirect: "/fail" 
-      
-    })
-  );
+  /* <------------------------FACEBOOK AUTHENTICATION ------------------> */
+router.get('/fb/profile', isLoggedIn, function (req, res) {
+  res.send(req.user)
+});
 
-  router.get("/fail", (req, res) => {
-    res.send("Failed attempt");
-  });
-  
-  router.get("/success", (req, res) => {
-    res.send("Success");
-  });
+router.get('/fb/error', isLoggedIn, function (req, res) {
+  res.send('pages/error');
+});
 
+router.get('/auth/facebook', passport.authenticate('facebook', {
+  scope:['password', 'email']
+}));
+
+router.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    successRedirect: 'http://localhost:3000/',
+    failureRedirect: '/error'
+  }));
+
+router.get('/fb/logout', function (req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+  res.redirect('/');
+}
 
 
 module.exports = router;
