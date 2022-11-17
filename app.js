@@ -40,8 +40,8 @@ app.use(cors({
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
-const dev_db_url = 'mongodb+srv://kurniadikevin:pisausl@cluster0.vqkgg6n.mongodb.net/?retryWrites=true&w=majority'
- const mongoDB = process.env.MONGODB_URI || dev_db_url; 
+const mongoDB = 'mongodb+srv://kurniadikevin:pisausl@cluster0.vqkgg6n.mongodb.net/?retryWrites=true&w=majority'
+ /* const mongoDB = process.env.MONGODB_URI || dev_db_url;  */
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
@@ -51,8 +51,6 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(compression());
-app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
