@@ -33,10 +33,7 @@ var commentsRouter = require('./routes/comments');
 
 
 var app = express();
-app.use(cors({
-  origin: "http://localhost:3000", // <-- location of the react app were connecting to
-  credentials: true,
-}));
+app.use(cors());
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
