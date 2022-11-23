@@ -34,7 +34,9 @@ var commentsRouter = require('./routes/comments');
 
 var app = express();
 app.use(cors({
-  origin : true
+  origin : true,
+  credentials: true,
+  allowedHeaders:"*"
 }));
 
 //integrate MONGO DB
