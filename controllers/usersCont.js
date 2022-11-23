@@ -48,7 +48,7 @@ exports.post_new_user=((req,res,next)=>{
       if (err) { 
         return next(err);
       }
-      res.redirect("http://localhost:3000/login");
+      res.redirect("https://friendface.vercel.app");
       });
     })
   }
