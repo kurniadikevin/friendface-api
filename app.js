@@ -36,7 +36,8 @@ var app = express();
 app.use(cors({
   origin : true,
   credentials: true,
-  allowedHeaders:"*"
+  allowedHeaders:"*",
+  contentType : "application/json"
 }));
 
 //integrate MONGO DB
