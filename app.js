@@ -33,7 +33,8 @@ var commentsRouter = require('./routes/comments');
 
 
 var app = express();
-app.use(cors({origin: '*'}));
+app.use(cors({origin: 'https://friendface.vercel.app/',
+  credentials : true}));
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
