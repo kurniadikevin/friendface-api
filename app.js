@@ -33,8 +33,7 @@ var commentsRouter = require('./routes/comments');
 
 
 var app = express();
-app.use(cors({origin: ['https://friendface.vercel.app/','https://friendface-1tipb4hjz-kurniadikevin.vercel.app/'],
-  credentials : true}));
+app.use(cors());
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
@@ -191,7 +190,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           else {
                //item.save();
                console.log('updated')
-              res.redirect('http://localhost:3000/profile');
+              res.redirect('https://friendface.vercel.app/profile');
           }
       }); 
       }
