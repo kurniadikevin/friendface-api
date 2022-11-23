@@ -33,7 +33,7 @@ var commentsRouter = require('./routes/comments');
 
 
 var app = express();
-app.use(cors({origin: 'https://friendface.vercel.app/',
+app.use(cors({origin: ['https://friendface.vercel.app/','https://friendface-git-main-kurniadikevin.vercel.app/','https://friendface-kurniadikevin.vercel.app/'],
   credentials : true}));
 
 //integrate MONGO DB
