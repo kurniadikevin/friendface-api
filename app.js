@@ -33,6 +33,7 @@ var commentsRouter = require('./routes/comments');
 
 
 var app = express();
+app.options('*', cors())
 app.use(cors({
   origin : true,
   credentials: true,
