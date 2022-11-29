@@ -35,7 +35,9 @@ var commentsRouter = require('./routes/comments');
 var app = express();
 
 app.use(cors({
+
   origin : 'https://friendface.vercel.app',
+
   credentials : true
 }));
 
@@ -51,6 +53,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
 
 app.use(logger('dev'));
 app.use(express.json());

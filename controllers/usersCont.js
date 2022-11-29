@@ -18,6 +18,33 @@ exports.get_user_all = (req,res,next)=>{
     })
 }
 
+// get user by  query
+exports.get_user_search = (req,res,next)=>{
+  User.find({ $or : [{ username : req.params.input}, {email : req.params.input}] }
+    ,'email username')
+  .sort({ date : -1})
+  .exec(function(err,user_list){
+      if(err){
+          return next(err);
+      }
+      //success
+      res.send(user_list)
+  })
+}
+
+exports.get_user_search_data = (req,res,next)=>{
+  User.find({ }
+    ,'email username')
+  .sort({ date : -1})
+  .exec(function(err,user_list){
+      if(err){
+          return next(err);
+      }
+      //success
+      res.send(user_list)
+  })
+}
+
 //get top 10 new user
 exports.get_new_user = (req,res,next)=>{
   User.find({},'')
@@ -48,7 +75,9 @@ exports.post_new_user=((req,res,next)=>{
       if (err) { 
         return next(err);
       }
+
       res.redirect("https://friendface.vercel.app/login");
+
       });
     })
   }

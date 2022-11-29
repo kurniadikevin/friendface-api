@@ -6,6 +6,9 @@ const users_controller= require('../controllers/usersCont');
 /* GET users listing. */
 router.get('/', users_controller.get_user_all);
 
+//get user for query
+router.get('/search/',users_controller.get_user_search_data);
+
 //test
 router.get('/recent',users_controller.get_new_user);
 
