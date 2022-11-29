@@ -45,7 +45,7 @@ exports.post_upload_image = (upload.single('image'), (req, res, next) => {
         }
         else {
              //item.save();
-             res.redirect('http://localhost:3000/profile');
+             res.redirect('https://friendface.vercel.app/profile');
         }
     });
   })
