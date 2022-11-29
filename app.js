@@ -33,7 +33,10 @@ var commentsRouter = require('./routes/comments');
 
 
 var app = express();
-app.use(cors());
+app.use(cors({
+  origin : 'http://localhost:3000',
+  credentials : true
+}));
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
