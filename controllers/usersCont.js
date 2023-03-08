@@ -45,10 +45,10 @@ exports.get_user_search_data = (req,res,next)=>{
   })
 }
 
-//get top 10 new user
+//get top 5 new user
 exports.get_new_user = (req,res,next)=>{
-  User.find({},({ _id : 0, password : 0}))
-  .sort({ friends : -1})
+  User.find({},({ friends: 0, password : 0}))
+  .sort({ date : -1})
   .limit(5)
   .exec(function(err,user_list){
       if(err){
