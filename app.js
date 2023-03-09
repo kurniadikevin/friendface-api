@@ -221,24 +221,6 @@ app.get('/images/:email', (req, res) => {
   });
 });
 
-/* <-------FACEBOOK AUTH---------> */
-passport.serializeUser(function (user, cb) {
-  cb(null, user);
-});
-
-passport.deserializeUser(function (obj, cb) {
-  cb(null, obj);
-});
-
-passport.use(new FacebookStrategy({
-  clientID: '850497516091970',
-  clientSecret: '807dd045cfe818cbed92be02cd230e5d',
-  callbackURL: 'http://localhost:5000/users/auth/facebook/callback'
-}, function (accessToken, refreshToken, profile, done) {
-  return done(null, profile);
-}
-));
-
 
 
 
