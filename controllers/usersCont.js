@@ -161,7 +161,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
       return next(err);
     } else{
     console.log('friend list added to receiver');
-
+ 
     //add friend list to sender
   User.findByIdAndUpdate(req.body.newFriend._id,{$push : {friends : req.body.newFriendReceiver}},
       (err,post)=>{
