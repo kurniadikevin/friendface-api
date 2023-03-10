@@ -180,10 +180,11 @@ app.post('/images', upload.single('image'), (req, res, next) => {
       }
   }/* console.log(fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename))) */
   
-  var userImgUrl = new User({
-    _id : req.body._id,
-    profilePicture :  req.file.filename
-  })
+  var userImgUrl = {
+    
+    profilePicture :  req.file.filename,
+   
+  }
   imgModel.create(obj, (err, item) => {
       if (err) {
           console.log(err);

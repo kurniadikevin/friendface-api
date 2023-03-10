@@ -7,7 +7,7 @@ var FacebookStrategy = require('passport-facebook');
 
 //get user all
 exports.get_user_all = (req,res,next)=>{
-    User.find({},'')
+    User.find({},({ _id : 0, password : 0}))
     .sort({ date : -1})
     .exec(function(err,user_list){
         if(err){
@@ -45,10 +45,10 @@ exports.get_user_search_data = (req,res,next)=>{
   })
 }
 
-//get top 10 new user
+//get top 5 new user
 exports.get_new_user = (req,res,next)=>{
-  User.find({},'')
-  .sort({ friends : -1})
+  User.find({},({ friends: 0, password : 0}))
+  .sort({ date : -1})
   .limit(5)
   .exec(function(err,user_list){
       if(err){
@@ -85,7 +85,7 @@ exports.post_new_user=((req,res,next)=>{
 
 //get user detail by id
 exports.get_user_detail =(req,res,next)=>{
-  User.find({ _id : req.params.userId},'')
+  User.find({ _id : req.params.userId},({ _id : 0, password : 0}))
   .exec(function(err,user_list){
       if(err){
           return next(err);
@@ -163,7 +163,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
       return next(err);
     } else{
     console.log('friend list added to receiver');
-
+ 
     //add friend list to sender
   User.findByIdAndUpdate(req.body.newFriend._id,{$push : {friends : req.body.newFriendReceiver}},
       (err,post)=>{
