@@ -16,6 +16,25 @@ exports.post_list = (req, res,next) => {
     });
   };
 
+  //get display list of post with paganation
+
+  const pageLimit = 10;
+  exports.post_list_page = (req, res,next) => {
+    Post.find({}, "")
+    .sort({ date: -1 })
+    .limit(pageLimit)
+    .skip(pageLimit * Math.max(0,req.params.pageNumber))
+    .populate("comment")
+    .populate('author')
+    .exec(function (err, post_list) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+     res.send(post_list);  
+    });
+  };
+
   //get display all friend post
   exports.post_list_friends = (req, res,next) => {
 

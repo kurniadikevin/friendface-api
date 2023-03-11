@@ -5,6 +5,9 @@ const posts_controller = require('../controllers/postsCont')
 /* GET all post */
 router.get('/',posts_controller.post_list);
 
+// get all post with paganation
+router.get('/page/:pageNumber',posts_controller.post_list_page);
+
 //get all friend post
 router.get('/friends/:userId',posts_controller.post_list_friends)
 
