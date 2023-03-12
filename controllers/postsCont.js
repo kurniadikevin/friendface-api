@@ -17,13 +17,12 @@ exports.post_list = (req, res,next) => {
   };
 
   //get display list of post with paganation
-
-  const pageLimit = 10;
   exports.post_list_page = (req, res,next) => {
+    const pageLimit = 10;
     Post.find({}, "")
     .sort({ date: -1 })
     .limit(pageLimit)
-    .skip(pageLimit * Math.max(0,req.params.pageNumber))
+    .skip(pageLimit * (req.params.pageNumber -1))
     .populate("comment")
     .populate('author')
     .exec(function (err, post_list) {
@@ -37,7 +36,6 @@ exports.post_list = (req, res,next) => {
 
   //get display all friend post
   exports.post_list_friends = (req, res,next) => {
-
     User.find({ _id : req.params.userId},'')
     .exec(function(err,user_list){
         if(err){
@@ -60,10 +58,42 @@ exports.post_list = (req, res,next) => {
           }
           //Successful, so render
          res.send(post_list);
-        
         });
     })
   };
+
+//GET display all friend post with paganation
+  exports.post_list_friends_page = (req, res,next) => {
+    const pageLimit= 10;
+    User.find({ _id : req.params.userId},'')
+    .exec(function(err,user_list){
+        if(err){
+            return next(err);
+        }
+        // find post that author is equal to friend email
+        let queryList = (user_list[0].friends).map((friend)=>{
+          return { 'author' : friend}
+          });
+
+        Post.find({ 
+          $or: [ {$or : queryList}, { 'author' : req.params.userId}]
+        }, "")
+        .sort({ date: -1 })
+        .populate("comment")
+        .populate('author')
+        .limit(10)
+        .skip(pageLimit * (req.params.pageNumber -1))
+        .exec(function (err, post_list) {
+          if (err) {
+            return next(err);
+          }
+          //Successful, so render
+         res.send(post_list);
+        });
+    })
+  };
+
+
 
   //GET user post
   exports.user_post_list= (req,res,next)=>{
@@ -77,10 +107,26 @@ exports.post_list = (req, res,next) => {
       }
       //Successful, so render
      res.send(post_list);
-    
     });
   }
 
+  //GET user post with paganation
+  exports.user_post_list_page= (req,res,next)=>{
+    const pageLimit= 10;
+    Post.find({ author : req.params.userId}, "")
+    .sort({ date: -1 })
+    .populate("comment")
+    .populate('author') 
+    .limit(10)
+    .skip(pageLimit * (req.params.pageNumber -1))
+    .exec(function (err, post_list) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+     res.send(post_list);
+    });
+  }
 
   //POST create new post 
   exports.create_new_post= (req,res,next)=>{
