@@ -95,10 +95,10 @@ exports.get_user_detail =(req,res,next)=>{
 
  // put update user username
 exports.put_update_username = ((req,res)=>{
-  const user = new User({
+  const user =  {
     username : req.body.username,
     _id : req.body._id
-  })
+  }
   User.findByIdAndUpdate(req.params.userId,user,{},(err, post) => {
     if (err) {
       return next(err);
@@ -112,7 +112,7 @@ exports.put_update_username = ((req,res)=>{
 });
 
 
-//put update user profilePicture 
+//put update user profilePicture   NOT USED BECAUSE IMAGE PROFILE LOADED IN APP.JS
 exports.put_update_user_profilePicture = ((req,res)=>{
   const user = new User({
     profilePicture : req.body.profilePicture,
