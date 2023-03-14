@@ -20,6 +20,9 @@ router.post('/newpost',posts_controller.create_new_post);
 //get  profile user post
 router.get('/:userId', posts_controller.user_post_list);
 
+//get profile user post count
+router.get('/:userId/count',posts_controller.user_post_count);
+
 //get  profile user post with paganation
 router.get('/:userId/page/:pageNumber', posts_controller.user_post_list_page);
 

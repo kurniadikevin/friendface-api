@@ -128,6 +128,17 @@ exports.post_list = (req, res,next) => {
     });
   }
 
+  //GET user post count
+  exports.user_post_count = (req,res,next)=>{
+    Post.count({author : req.params.userId})
+    .exec(function(err,post_count){
+      if(err){
+        return next(err)
+      } 
+      res.send({postCount : post_count})
+    })
+  }
+
   //POST create new post 
   exports.create_new_post= (req,res,next)=>{
 
