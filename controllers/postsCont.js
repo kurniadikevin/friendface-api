@@ -41,7 +41,7 @@ exports.post_list = (req, res,next) => {
         if(err){
             return next(err);
         }
-        // find post that author is equal to friend email
+        // find post that author is equal to friend userId
         let queryList = (user_list[0].friends).map((friend)=>{
           return { 'author' : friend}
           });
