@@ -81,6 +81,8 @@ exports.post_new_user=((req,res,next)=>{
   }
 )
 
+
+
 //get user detail by id
 exports.get_user_detail =(req,res,next)=>{
   User.find({ _id : req.params.userId},({ _id : 0, password : 0}))
@@ -188,6 +190,7 @@ exports.post_decline_friend_request=((req,res,next)=>{
     if(err){
       return next(err);
     }
+    res.status(200)
     console.log('friend request decline')
   })
 })
