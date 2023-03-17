@@ -68,14 +68,14 @@ exports.post_new_user=((req,res,next)=>{
         return next('password failed to proceed');
       }
     const user = new User({
-      username: req.body.username,
+     
       email : req.body.email,
       password: hashedPassword,
     }).save(err => {
       if (err) { 
         return next(err);
       }
-      res.redirect("http://localhost:3000/login");// change to specific one
+      res.send(200);
       });
     })
   }
