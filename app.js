@@ -34,7 +34,7 @@ var commentsRouter = require('./routes/comments');
 
 var app = express();
 app.use(cors({
-  origin : 'http://localhost:3000',
+  origin : 'https://friendface.vercel.app',
   credentials : true
 }));
 
@@ -196,7 +196,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           else {
                //item.save();
                console.log('updated')
-              res.redirect('http://localhost:3000/profile');
+              res.redirect('https://friendface.vercel.app/profile');
           }
       }); 
       }
