@@ -61,8 +61,13 @@ exports.get_new_user = (req,res,next)=>{
 
 
 //post create new user Sign-up
-exports.post_new_user=((req,res,next)=>{
-    bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+exports.post_new_user=(async (req,res,next)=>{
+
+const emailExist = await User.find({ email : {$eq :req.body.email}});
+    if(emailExist.length > 0){
+      return res.status(400).json({ error: 'Email already used' });
+    } else{
+         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
       // if err, do something
       if(err){
         return next('password failed to proceed');
@@ -78,6 +83,7 @@ exports.post_new_user=((req,res,next)=>{
       res.send(200);
       });
     })
+    }
   }
 )
 
