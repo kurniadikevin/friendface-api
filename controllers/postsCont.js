@@ -155,7 +155,7 @@ exports.post_list = (req, res,next) => {
 
    //update like on post
   exports.update_post_likes = ((req,res,next)=>{
-    Post.findByIdAndUpdate(req.params.postId,{$push : {likes : req.body.likeBy}},
+    Post.findByIdAndUpdate(req.params.postId,{$addToSet : {likes : req.body.likeBy}},
       (err,post)=>{
       if(err){
         return next(err);
