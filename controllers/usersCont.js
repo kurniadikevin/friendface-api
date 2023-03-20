@@ -134,7 +134,7 @@ exports.put_update_user_profilePicture = ((req,res)=>{
 
 // send friend request
 exports.post_user_friend_request= ((req,res,next)=>{
-  User.findByIdAndUpdate(req.params.userId,{$push : {friendRequest : req.body.requestData}},
+  User.findByIdAndUpdate(req.params.userId,{$addToSet : {friendRequest : req.body.requestData}},
     (err,post)=>{
     if(err){
       return next(err);
@@ -157,7 +157,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
     console.log('friend request removed')
 
    //add friend list to receiver
-  User.findByIdAndUpdate(req.params.userId,{$push : {friends : req.body.newFriend}},
+  User.findByIdAndUpdate(req.params.userId,{$addToSet : {friends : req.body.newFriend}},
     (err,post)=>{
     if(err){
       return next(err);
@@ -165,7 +165,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
     console.log('friend list added to receiver');
  
     //add friend list to sender
-  User.findByIdAndUpdate(req.body.newFriend._id,{$push : {friends : req.body.newFriendReceiver}},
+  User.findByIdAndUpdate(req.body.newFriend._id,{$addToSet : {friends : req.body.newFriendReceiver}},
       (err,post)=>{
       if(err){
         return next(err);
