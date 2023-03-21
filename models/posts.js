@@ -9,7 +9,7 @@ const PostSchema = new Schema({
     date :  { type: Date, default: Date.now },
     likes : { type: Array , default: []},
     comment : { type : Array, default : [] },
-  /*  content : {} */
+    imageContent : {type : String} 
 });
 
 
