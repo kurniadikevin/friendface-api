@@ -161,9 +161,6 @@ exports.post_list = (req, res,next) => {
         return next(err);
       }
       console.log('likes updated')
-     /*  res
-        .status(200)
-        .end() */
         next();
     });
   }); 
@@ -176,7 +173,8 @@ exports.post_list = (req, res,next) => {
         const notifObj={
           postId : req.params.postId,
           byUser : req.body.likeBy,
-          action : 'Liked'
+          action : 'Liked',
+          date : Date.now()
         }
         if(err){
           return next(err)
