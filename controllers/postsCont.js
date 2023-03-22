@@ -161,8 +161,39 @@ exports.post_list = (req, res,next) => {
         return next(err);
       }
       console.log('likes updated')
-      res
+     /*  res
         .status(200)
-        .end()
+        .end() */
+        next();
     });
   }); 
+
+  // push notification for like
+  exports.push_notification_like=(req,res,next)=>{
+    // find post and find the author
+    Post.find({_id : req.params.postId },{author: 1, text: 1})
+      .exec((err,result)=>{
+        const notifObj={
+          postId : req.params.postId,
+          byUser : req.body.likeBy,
+          action : 'Liked'
+        }
+        if(err){
+          return next(err)
+        }
+        const authorId= (result[0].author).valueOf();
+        console.log(authorId);
+         // push notification to author postNotification
+        User.findByIdAndUpdate(authorId,{$addToSet : {postNotification : notifObj}},
+        (err,post)=>{
+          if(err){
+            console.log(err);
+            return next(err);
+          } 
+          console.log('push notification sucess');
+          res
+          .status(200)
+          .end()
+        })
+      })  
+  }

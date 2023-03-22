@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const posts_controller = require('../controllers/postsCont') 
+const posts_controller = require('../controllers/postsCont');
 
 /* GET all post */
 router.get('/',posts_controller.post_list);
@@ -27,6 +27,7 @@ router.get('/:userId/count',posts_controller.user_post_count);
 router.get('/:userId/page/:pageNumber', posts_controller.user_post_list_page);
 
 // post like post
-router.post('/likes/:postId',posts_controller.update_post_likes); 
+router.post('/likes/:postId',posts_controller.update_post_likes, posts_controller.push_notification_like); 
+
 
 module.exports = router;
