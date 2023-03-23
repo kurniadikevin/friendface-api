@@ -184,8 +184,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
    } 
   });
   }
-  });
-  
+  }); 
 })
 
 //post decline friend request
@@ -201,4 +200,16 @@ exports.post_decline_friend_request=((req,res,next)=>{
   })
 })
 
+// get user profilePicture by id parameter 
+exports.get_user_profile_picture_byId=((req,res,next)=>{
+  User.find({ _id : req.params.userId},({ _id : 0, password : 0,friends: 0,friendRequest: 0}))
+  .exec(function(err,user_list){
+      if(err){
+          return next(err);
+      }
+      //sucess
+      const imageName= user_list[0].profilePicture;
+      res.redirect(`http://localhost:5000/${imageName}`)
+  })
+})
 
