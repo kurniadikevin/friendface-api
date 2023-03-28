@@ -93,6 +93,21 @@ exports.post_list = (req, res,next) => {
     })
   };
 
+  //GET post detail by Id
+  exports.post_detail_byId=(req,res,next)=>{
+    Post.find({ _id : req.params.postId}, "")
+    
+    .populate("comment")
+    .populate('author') 
+    .exec(function (err, post_list) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+     res.send(post_list);
+    });
+  }
+
 
 
   //GET user post
