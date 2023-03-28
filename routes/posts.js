@@ -6,7 +6,7 @@ const posts_controller = require('../controllers/postsCont');
 router.get('/',posts_controller.post_list);
 
 //get post detail
-router.get('/:postId',posts_controller.post_detail_byId);
+router.get('/postDetail/:postId/page/1',posts_controller.post_detail_byId);
 
 // get all post with paganation
 router.get('/page/:pageNumber',posts_controller.post_list_page);
@@ -30,7 +30,7 @@ router.get('/:userId', posts_controller.user_post_list);
 router.get('/:userId/count',posts_controller.user_post_count);
 
 //get  profile user post with paganation
-router.get('/:userId/page/:pageNumber', posts_controller.user_post_list_page);
+router.get('/byUser/:userId/page/:pageNumber', posts_controller.user_post_list_page);
 
 // post like post
 router.post('/likes/:postId',posts_controller.update_post_likes, posts_controller.push_notification_like); 
