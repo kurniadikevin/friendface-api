@@ -20,6 +20,9 @@ router.get('/friends/:userId/page/:pageNumber',posts_controller.post_list_friend
 //create new post
 router.post('/newpost',posts_controller.create_new_post);
 
+// post delete specific post
+router.post('/delete/:postId',posts_controller.post_detail_delete);
+
 //get  profile user post
 router.get('/:userId', posts_controller.user_post_list);
 

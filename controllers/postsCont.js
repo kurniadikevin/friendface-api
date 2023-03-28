@@ -108,6 +108,18 @@ exports.post_list = (req, res,next) => {
     });
   }
 
+  //POST delete specific post by Author
+  exports.post_detail_delete=(req,res,next)=>{
+    Post.findOneAndDelete({_id :{ $eq : req.params.postId}},
+      function(err,docs){
+        if(err){
+          return next(err)
+        } else{
+          console.log('Deleted : ',docs);
+          res.send(200);
+        }
+    })
+  }
 
 
   //GET user post
