@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const posts_controller = require('../controllers/postsCont') 
+const posts_controller = require('../controllers/postsCont');
 
-/* GET all post */
+// get all post
 router.get('/',posts_controller.post_list);
+
+//get post detail
+router.get('/postDetail/:postId/page/1',posts_controller.post_detail_byId);
 
 // get all post with paganation
 router.get('/page/:pageNumber',posts_controller.post_list_page);
@@ -17,6 +20,9 @@ router.get('/friends/:userId/page/:pageNumber',posts_controller.post_list_friend
 //create new post
 router.post('/newpost',posts_controller.create_new_post);
 
+// post delete specific post
+router.post('/delete/:postId',posts_controller.post_detail_delete);
+
 //get  profile user post
 router.get('/:userId', posts_controller.user_post_list);
 
@@ -24,9 +30,10 @@ router.get('/:userId', posts_controller.user_post_list);
 router.get('/:userId/count',posts_controller.user_post_count);
 
 //get  profile user post with paganation
-router.get('/:userId/page/:pageNumber', posts_controller.user_post_list_page);
+router.get('/byUser/:userId/page/:pageNumber', posts_controller.user_post_list_page);
 
 // post like post
-router.post('/likes/:postId',posts_controller.update_post_likes); 
+router.post('/likes/:postId',posts_controller.update_post_likes, posts_controller.push_notification_like); 
+
 
 module.exports = router;

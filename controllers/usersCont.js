@@ -61,8 +61,13 @@ exports.get_new_user = (req,res,next)=>{
 
 
 //post create new user Sign-up
-exports.post_new_user=((req,res,next)=>{
-    bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+exports.post_new_user=(async (req,res,next)=>{
+
+const emailExist = await User.find({ email : {$eq :req.body.email}});
+    if(emailExist.length > 0){
+      return res.status(400).json({ error: 'Email already used' });
+    } else{
+         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
       // if err, do something
       if(err){
         return next('password failed to proceed');
@@ -78,6 +83,7 @@ exports.post_new_user=((req,res,next)=>{
       res.send(200);
       });
     })
+    }
   }
 )
 
@@ -134,7 +140,7 @@ exports.put_update_user_profilePicture = ((req,res)=>{
 
 // send friend request
 exports.post_user_friend_request= ((req,res,next)=>{
-  User.findByIdAndUpdate(req.params.userId,{$push : {friendRequest : req.body.requestData}},
+  User.findByIdAndUpdate(req.params.userId,{$addToSet : {friendRequest : req.body.requestData}},
     (err,post)=>{
     if(err){
       return next(err);
@@ -157,7 +163,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
     console.log('friend request removed')
 
    //add friend list to receiver
-  User.findByIdAndUpdate(req.params.userId,{$push : {friends : req.body.newFriend}},
+  User.findByIdAndUpdate(req.params.userId,{$addToSet : {friends : req.body.newFriend}},
     (err,post)=>{
     if(err){
       return next(err);
@@ -165,7 +171,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
     console.log('friend list added to receiver');
  
     //add friend list to sender
-  User.findByIdAndUpdate(req.body.newFriend._id,{$push : {friends : req.body.newFriendReceiver}},
+  User.findByIdAndUpdate(req.body.newFriend._id,{$addToSet : {friends : req.body.newFriendReceiver}},
       (err,post)=>{
       if(err){
         return next(err);
@@ -178,8 +184,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
    } 
   });
   }
-  });
-  
+  }); 
 })
 
 //post decline friend request
@@ -195,4 +200,19 @@ exports.post_decline_friend_request=((req,res,next)=>{
   })
 })
 
+// get user profilePicture by id parameter 
+exports.get_user_profile_picture_byId=((req,res,next)=>{
+  User.find({ _id : req.params.userId},({ _id : 0, password : 0,friends: 0,friendRequest: 0}))
+  .exec(function(err,user_list){
+     let imageName= user_list[0].profilePicture;
+     if(!imageName){
+      imageName='noPicture.png';
+     }
+      if(err){
+          next(err);
+      }
+      //sucess
+      res.redirect(`http://localhost:5000/${imageName}`)
+  })
+})
 

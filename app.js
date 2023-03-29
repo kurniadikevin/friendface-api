@@ -20,6 +20,7 @@ var fs = require('fs');
 
 //import model
 const User = require('./models/users');
+const Post = require('./models/posts');
 const imgModel = require('./models/images');
 
 
@@ -167,7 +168,7 @@ app.get('/images', (req, res) => {
   });
 });
 
-// post images upload
+// post images upload for profile picture
 app.post('/images', upload.single('image'), (req, res, next) => {
   var obj = {
       byUser : req.body.byUser,
@@ -197,8 +198,9 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           }
           else {
                //item.save();
-               console.log('updated')
-              res.redirect('https://friendface.vercel.app/profile');
+               console.log('updated');
+               res.redirect('https://friendface.vercel.app/profile');
+              
           }
       }); 
       }
@@ -222,7 +224,27 @@ app.get('/images/:email', (req, res) => {
   });
 });
 
-
+//post image upload for post imageContent
+app.post('/postImages', upload.single('image'), (req, res, next) => {
+  
+  const postImageUrl = new Post({
+    author: req.body.authorId,
+    imageContent :  req.file.filename,
+    text : req.body.text
+  })
+ 
+        postImageUrl.save((err)=>{
+         if(err){
+           return next(err);
+        } else{
+            //item.save();
+            console.log('post image sucessful');
+            res.send(400);
+        }
+        }
+        )
+      }
+);
 
 
 /* <-------------- ERROR HANDLING ----------> */

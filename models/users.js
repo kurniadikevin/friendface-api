@@ -9,7 +9,8 @@ const UserSchema= new Schema({
     password : { type: String, required: true},
     friends : { type:Array  },
     profilePicture : {type:String },
-    friendRequest : {type:Array}
+    friendRequest : {type:Array},
+    postNotification : {type:Array}
 }) 
 
 //virtual user url

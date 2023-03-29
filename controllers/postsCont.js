@@ -93,6 +93,33 @@ exports.post_list = (req, res,next) => {
     })
   };
 
+  //GET post detail by Id
+  exports.post_detail_byId=(req,res,next)=>{
+    Post.find({ _id : req.params.postId}, "")
+    
+    .populate("comment")
+    .populate('author') 
+    .exec(function (err, post_list) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+     res.send(post_list);
+    });
+  }
+
+  //POST delete specific post by Author
+  exports.post_detail_delete=(req,res,next)=>{
+    Post.findOneAndDelete({_id :{ $eq : req.params.postId}},
+      function(err,docs){
+        if(err){
+          return next(err)
+        } else{
+          console.log('Deleted : ',docs);
+          res.send(200);
+        }
+    })
+  }
 
 
   //GET user post
@@ -155,14 +182,43 @@ exports.post_list = (req, res,next) => {
 
    //update like on post
   exports.update_post_likes = ((req,res,next)=>{
-    Post.findByIdAndUpdate(req.params.postId,{$push : {likes : req.body.likeBy}},
+    Post.findByIdAndUpdate(req.params.postId,{$addToSet : {likes : req.body.likeBy}},
       (err,post)=>{
       if(err){
         return next(err);
       }
       console.log('likes updated')
-      res
-        .status(200)
-        .end()
+        next();
     });
   }); 
+
+  // push notification for like
+  exports.push_notification_like=(req,res,next)=>{
+    // find post and find the author
+    Post.find({_id : req.params.postId },{author: 1, text: 1})
+      .exec((err,result)=>{
+        const notifObj={
+          postId : req.params.postId,
+          byUser : req.body.likeBy,
+          action : 'Liked',
+          date : Date.now()
+        }
+        if(err){
+          return next(err)
+        }
+        const authorId= (result[0].author).valueOf();
+        console.log(authorId);
+         // push notification to author postNotification
+        User.findByIdAndUpdate(authorId,{$addToSet : {postNotification : notifObj}},
+        (err,post)=>{
+          if(err){
+            console.log(err);
+            return next(err);
+          } 
+          console.log('push notification sucess');
+          res
+          .status(200)
+          .end()
+        })
+      })  
+  }
