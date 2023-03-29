@@ -31,6 +31,7 @@ const postsRouter =  require('./routes/posts');
 //var imagesRouter = require('./routes/images');
 const commentsRouter = require('./routes/comments');
 const chatRoomRouter= require('./routes/chatRoom');
+const messageRouter = require('./routes/message');
 
 
 
@@ -118,6 +119,7 @@ app.use('/posts', postsRouter);
 //app.use('/images', imagesRouter);
 app.use('/comments',commentsRouter);
 app.use('/chatRoom',chatRoomRouter);
+app.use('/message',messageRouter);
 
 
 /* <-----------LOGIN USER SECTION ----------------------------------> */

@@ -11,4 +11,4 @@ const MessagesSchema = new Schema({
     readAt : { type: Date}
 });
 
-module.exports= mongoose.model("Comment",MessagesSchema);
+module.exports= mongoose.model("Message",MessagesSchema);

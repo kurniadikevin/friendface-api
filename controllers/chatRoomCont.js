@@ -1,6 +1,5 @@
 const ChatRoom = require('../models/chatRoom');
 
-
 //GET chatroom list
 exports.chat_room_list_all=(req,res,next)=>{
     ChatRoom.find({}, "")
