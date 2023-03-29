@@ -1,7 +1,7 @@
 const ChatRoom = require('../models/chatRoom');
 
 //GET chatroom list
-exports.chat_room_list_all=(req,res,next)=>{
+exports.find_chat_room_list_all=(req,res,next)=>{
     ChatRoom.find({}, "")
     .sort({ date: -1 })
     .exec(function (err, list) {
@@ -14,9 +14,10 @@ exports.chat_room_list_all=(req,res,next)=>{
 }
 
 //GET chatroom byId
-exports.chat_room_byId=(req,res,next)=>{
+exports.find_chat_room_byId=(req,res,next)=>{
     ChatRoom.find({ _id : req.params.chatRoomId}, "")
     .sort({ date: -1 })
+    .populate("messagesId") 
     .exec(function (err, list) {
       if (err) {
         return next(err);

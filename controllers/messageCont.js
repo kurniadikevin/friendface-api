@@ -1,4 +1,5 @@
 const Message = require('../models/message');
+const ChatRoom= require('../models/chatRoom');
 
 //GET message list all
 exports.message_list_all=(req,res,next)=>{
@@ -25,3 +26,34 @@ exports.message_byId=(req,res,next)=>{
      res.send(list);  
     });
 }
+
+//POST create message
+exports.create_new_message=((req,res,next)=>{
+  const data= new Message({
+    author : req.body.currentUser,
+    text : req.body.text,
+    mediaContentUrl : req.body.mediaUrl,
+    chatRoomId : req.params.chatRoomId,
+     })
+     data.save(err=>{
+         if(err){
+             return next(err);
+         } else{
+             console.log('message created');
+             console.log(data)
+             assignIdToChatRoom(data._id,req.params.chatRoomId);
+             res.sendStatus(200);
+         }
+     })
+ })
+
+ // assign message id to chat room
+ const assignIdToChatRoom=(message_Id,chatRoom_Id)=>{
+  ChatRoom.findByIdAndUpdate(chatRoom_Id,{$push : {messagesId : message_Id }},
+    (err)=>{
+      if(err){
+        return next(err);
+      }
+      console.log('chatRoom messagesId updated')
+    } )
+ }

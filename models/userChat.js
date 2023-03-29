@@ -7,4 +7,4 @@ const UserChatSchema = new Schema({
     chatRoomList :  { type: Array , default: []}
 });
 
-module.exports= mongoose.model("Comment",UserChatSchema);
+module.exports= mongoose.model("UserChat",UserChatSchema);

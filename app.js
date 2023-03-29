@@ -32,7 +32,7 @@ const postsRouter =  require('./routes/posts');
 const commentsRouter = require('./routes/comments');
 const chatRoomRouter= require('./routes/chatRoom');
 const messageRouter = require('./routes/message');
-
+const userChatRouter = require('./routes/userChat');
 
 
 var app = express();
@@ -120,7 +120,8 @@ app.use('/posts', postsRouter);
 app.use('/comments',commentsRouter);
 app.use('/chatRoom',chatRoomRouter);
 app.use('/message',messageRouter);
-
+app.use('/userChat',userChatRouter);
+ 
 
 /* <-----------LOGIN USER SECTION ----------------------------------> */
 app.get('/users/login',(req,res)=>{
