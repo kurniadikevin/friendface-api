@@ -25,11 +25,12 @@ const imgModel = require('./models/images');
 
 
 // router import
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var postsRouter =  require('./routes/posts');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const postsRouter =  require('./routes/posts');
 //var imagesRouter = require('./routes/images');
-var commentsRouter = require('./routes/comments');
+const commentsRouter = require('./routes/comments');
+const chatRoomRouter= require('./routes/chatRoom');
 
 
 
@@ -116,6 +117,7 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 //app.use('/images', imagesRouter);
 app.use('/comments',commentsRouter);
+app.use('/chatRoom',chatRoomRouter);
 
 
 /* <-----------LOGIN USER SECTION ----------------------------------> */
