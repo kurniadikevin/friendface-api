@@ -63,6 +63,19 @@ exports.create_user_chat =(async(req,res,next)=>{
       }
    })
 
+// POST update userChat to latest chatRoomList
+exports.update_userChat_chatRoomList = ((req,res,next)=>{
+  UserChat.findOneAndUpdate({userId : req.params.userId}, {chatRoomList : res.locals.arrayOfId},
+    (err,list)=>{
+    if(err){
+      return next(err);
+    }
+    console.log(req.params.userId)
+    console.log('userChat chatRoomList updated')
+      res.sendStatus(200);
+  });
+}); 
+
 
 // populate chatRoomList with chatRoomId that belong to user
 //chatRoom find membersId === userChat userid

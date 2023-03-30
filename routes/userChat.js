@@ -14,7 +14,8 @@ router.get('/byUserId/:userId',userChat_controller.find_user_chat_by_userId);
 // POST create userChat
 router.post('/create/:userId',userChat_controller.populate_userchat_chatRoomList,userChat_controller.create_user_chat);
 
-
+//POST update userChat chatRoomList with latest chatRoomList available
+router.post('/update/:userId',userChat_controller.populate_userchat_chatRoomList, userChat_controller.update_userChat_chatRoomList);
 
 //test
 /* router.get('/test/:userId',userChat_controller.populate_userchat_chatRoomList); */
