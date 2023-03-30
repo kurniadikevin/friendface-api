@@ -17,6 +17,7 @@ exports.find_chat_room_list_all=(req,res,next)=>{
 exports.find_chat_room_byId=(req,res,next)=>{
     ChatRoom.find({ _id : req.params.chatRoomId}, "")
     .sort({ date: -1 })
+    .populate('membersId')
     .populate("messagesId") 
     .exec(function (err, list) {
       if (err) {
