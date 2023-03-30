@@ -31,6 +31,7 @@ exports.find_user_chat_by_userChatId=(req,res,next)=>{
 exports.find_user_chat_by_userId=(req,res,next)=>{
     UserChat.find({ userId : req.params.userId}, "")
     .sort({ date: -1 })
+    .populate('chatRoomList')
     .exec(function (err, list) {
       if (err) {
         return next(err);

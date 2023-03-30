@@ -101,6 +101,19 @@ exports.get_user_detail =(req,res,next)=>{
   })
 }
 
+//get user simplified email and username only
+exports.get_user_detail_simplified =(req,res,next)=>{
+  User.find({ _id : req.params.userId},({ _id : 0, email : 1,username : 1}))
+  .exec(function(err,user_list){
+      if(err){
+          return next(err);
+      }
+      //sucess
+      res.send(user_list)
+  })
+}
+
+
  // put update user username
 exports.put_update_username = ((req,res)=>{
   const user =  {

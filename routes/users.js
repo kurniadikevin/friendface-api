@@ -18,6 +18,9 @@ router.post('/signup',users_controller.post_new_user);
 // GET user detail
 router.get('/:userId', users_controller.get_user_detail);
 
+// GET user detail
+router.get('/simplified/:userId', users_controller.get_user_detail_simplified);
+
 //GET user profile picture with Id parameter input
 router.get('/profilePicture/:userId', users_controller.get_user_profile_picture_byId);
 
