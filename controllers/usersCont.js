@@ -103,7 +103,7 @@ exports.get_user_detail =(req,res,next)=>{
 
 //get user simplified email and username only
 exports.get_user_detail_simplified =(req,res,next)=>{
-  User.find({ _id : req.params.userId},({ _id : 0, email : 1,username : 1}))
+  User.find({ _id : req.params.userId},({  email : 1,username : 1}))
   .exec(function(err,user_list){
       if(err){
           return next(err);
