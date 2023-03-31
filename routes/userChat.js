@@ -18,6 +18,6 @@ router.post('/create/:userId',userChat_controller.populate_userchat_chatRoomList
 router.post('/update/:userId',userChat_controller.populate_userchat_chatRoomList, userChat_controller.update_userChat_chatRoomList);
 
 //test
-/* router.get('/test/:userId',userChat_controller.populate_userchat_chatRoomList); */
+router.get('/test/:userId',userChat_controller.populate_userchat_chatRoomList);
 
 module.exports = router;
