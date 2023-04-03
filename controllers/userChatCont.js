@@ -73,31 +73,31 @@ exports.update_userChat_chatRoomList = ((req,res,next)=>{
     }
     console.log(res.locals.arrayOfId);
     console.log('userChat chatRoomList updated')
-      res.sendStatus(200);
+    res.sendStatus(200);
   });
 }); 
 
 
 // populate chatRoomList with chatRoomId that belong to user
-// query not working!!!!
-//chatRoom find membersId === userChat userid
 exports.populate_userchat_chatRoomList=(req,res,next)=>{
-  ChatRoom.find({ 'membersId' : '6374e91e5ffbe2e45ddf4045'},{_id : 1})
+  ChatRoom.find({},({_id :1 , membersId : 1}))
   .exec(function (err, list) {
     if (err) {
       return next(err);
     }
+    const filterList = list.filter((item)=>{
+      return (item.membersId).includes(req.params.userId); 
+    })
+    console.log(filterList);
     //Successful, so render
-  /*   const arrayOfId = list.map((item)=>{
+    const arrayOfId = filterList.map((item)=>{
       return item._id;
-    }) */
-   console.log(req.params.userId)
-   console.log('middleware called')
-   console.log(list)
-  // console.log(arrayOfId);
-  // res.locals.arrayOfId= arrayOfId;
-   //next();
-   res.send(list);
+    })
+   //console.log(req.params.userId)
+   console.log(arrayOfId);
+   res.locals.arrayOfId= arrayOfId;
+   //res.send(arrayOfId);
+   next();
   });
 }
 
