@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cors = require('cors');
 const compression = require("compression");
 const helmet = require("helmet");
-
+require('dotenv').config();
 const bcrypt =require('bcryptjs');
 const session = require("express-session");
 const passport = require("passport");
@@ -43,7 +43,7 @@ app.use(cors({
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
-const dev_db_url = 'mongodb+srv://kurniadikevin:pisausl@cluster0.vqkgg6n.mongodb.net/?retryWrites=true&w=majority'
+const dev_db_url = process.env.DATABASE_URL;
  const mongoDB = process.env.MONGODB_URI || dev_db_url; 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
