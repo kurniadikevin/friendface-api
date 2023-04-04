@@ -48,8 +48,6 @@ exports.create_new_private_chat_room=((req,res,next)=>{
 
 //POST make chatroom group
 exports.create_new_group_chat_room=((req,res,next)=>{
-    console.log(req.body.currentUser);
-    console.log(req.body.userIdArr);
     const data= new ChatRoom({
        membersId : [req.body.currentUser, ...req.body.userIdArr]
        })

@@ -34,7 +34,7 @@ exports.get_user_search = (req,res,next)=>{
 
 exports.get_user_search_data = (req,res,next)=>{
   User.find({ }
-    ,'email username')
+    ,'email username profilePicture')
   .sort({ date : -1})
   .exec(function(err,user_list){
       if(err){
