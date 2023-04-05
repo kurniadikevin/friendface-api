@@ -57,7 +57,6 @@ exports.create_user_chat =(async(req,res,next)=>{
                return next(err);
            } else{
                console.log('userChat created')
-               console.log(data);
                res.sendStatus(200);
            }
        })
@@ -71,7 +70,6 @@ exports.update_userChat_chatRoomList = ((req,res,next)=>{
     if(err){
       return next(err);
     }
-    console.log(res.locals.arrayOfId);
     console.log('userChat chatRoomList updated')
     res.sendStatus(200);
   });

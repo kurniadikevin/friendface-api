@@ -36,12 +36,12 @@ exports.create_new_private_chat_room=((req,res,next)=>{
  const data= new ChatRoom({
     membersId : [req.body.currentUser, req.params.userId]
     })
-    data.save(err=>{
+    data.save((err,result)=>{
         if(err){
             return next(err);
         } else{
-            console.log('chat room created')
-            res.sendStatus(200)
+            console.log(result);
+            res.send(result);
         }
     })
 })
