@@ -59,6 +59,20 @@ exports.get_new_user = (req,res,next)=>{
   })
 }
 
+//get top 5 user with most friend by friends array length
+exports.get_popular_user = (req,res,next)=>{
+  User.find({ friends : {$size : 2}},({ password : 0, friends : 0}))
+  .limit(5)
+  .exec(function(err,user_list){
+      if(err){
+          return next(err);
+      }
+      //sucess
+      res.send(user_list)
+  })
+}
+
+
 
 //post create new user Sign-up
 exports.post_new_user=(async (req,res,next)=>{

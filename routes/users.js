@@ -12,6 +12,9 @@ router.get('/search',users_controller.get_user_search_data);
 //test
 router.get('/recent',users_controller.get_new_user);
 
+//test
+router.get('/popular',users_controller.get_popular_user);
+
 //POST create new user
 router.post('/signup',users_controller.post_new_user);
 
