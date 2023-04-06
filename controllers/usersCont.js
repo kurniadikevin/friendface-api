@@ -212,7 +212,7 @@ exports.get_user_profile_picture_byId=((req,res,next)=>{
           next(err);
       }
       //sucess
-      res.redirect(`http://localhost:5000/${imageName}`)
+      res.redirect(`https://odin-book-api-production.up.railway.app/${imageName}`)
   })
 })
 
