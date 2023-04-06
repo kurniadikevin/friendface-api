@@ -49,7 +49,11 @@ exports.create_new_message=((req,res,next)=>{
 
  // assign message id to chat room
  const assignIdToChatRoom=(message_Id,chatRoom_Id)=>{
-  ChatRoom.findByIdAndUpdate(chatRoom_Id,{$push : {messagesId : message_Id }},
+  const update={
+    $push : {messagesId : message_Id },
+    modifiedAt : Date.now(),
+}
+  ChatRoom.findByIdAndUpdate(chatRoom_Id, update,
     (err)=>{
       if(err){
         return next(err);

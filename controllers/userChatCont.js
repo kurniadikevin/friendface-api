@@ -86,13 +86,10 @@ exports.populate_userchat_chatRoomList=(req,res,next)=>{
     const filterList = list.filter((item)=>{
       return (item.membersId).includes(req.params.userId); 
     })
-    console.log(filterList);
     //Successful, so render
     const arrayOfId = filterList.map((item)=>{
       return item._id;
     })
-   //console.log(req.params.userId)
-   console.log(arrayOfId);
    res.locals.arrayOfId= arrayOfId;
    //res.send(arrayOfId);
    next();
