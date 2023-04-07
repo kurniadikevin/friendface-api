@@ -12,11 +12,17 @@ router.get('/search',users_controller.get_user_search_data);
 //test
 router.get('/recent',users_controller.get_new_user);
 
+//test
+router.get('/popular',users_controller.get_popular_user);
+
 //POST create new user
 router.post('/signup',users_controller.post_new_user);
 
 // GET user detail
 router.get('/:userId', users_controller.get_user_detail);
+
+// GET user detail
+router.get('/simplified/:userId', users_controller.get_user_detail_simplified);
 
 //GET user profile picture with Id parameter input
 router.get('/profilePicture/:userId', users_controller.get_user_profile_picture_byId);
@@ -52,7 +58,7 @@ router.get('/auth/facebook', passport.authenticate('facebook', {
 
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
-    successRedirect: 'https://friendface.vercel.app/',
+    successRedirect: 'http://localhost:3000/',
     failureRedirect: '/error'
   }));
 

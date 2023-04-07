@@ -34,7 +34,7 @@ exports.get_user_search = (req,res,next)=>{
 
 exports.get_user_search_data = (req,res,next)=>{
   User.find({ }
-    ,'email username')
+    ,'email username profilePicture')
   .sort({ date : -1})
   .exec(function(err,user_list){
       if(err){
@@ -47,7 +47,7 @@ exports.get_user_search_data = (req,res,next)=>{
 
 //get top 5 new user
 exports.get_new_user = (req,res,next)=>{
-  User.find({},({ friends: 0, password : 0}))
+  User.find({},({email: 1, username: 1,profilePicture: 1}))
   .sort({ _id : -1})
   .limit(5)
   .exec(function(err,user_list){
@@ -58,6 +58,40 @@ exports.get_new_user = (req,res,next)=>{
       res.send(user_list)
   })
 }
+
+//get top 5 user with most friend by friends array length
+exports.get_popular_user = (req,res,next)=>{
+  User.aggregate([
+    // Project with an array length
+    { "$project": {
+        "_id": 1,
+        "username": 1,
+        "email": 1,
+        "profilePicture" : 1,
+        "length": { "$size": "$friends" }
+    }},
+
+    // Sort on the "length"
+    { "$sort": { "length": -1 } },
+
+    // Project if you really want
+    { "$project": {
+      "_id": 1,
+      "username": 1,
+      "email": 1,
+      "profilePicture" : 1,
+    }}
+])
+  .limit(5)
+  .exec(function(err,user_list){
+    if(err){
+        return next(err);
+    }
+    //sucess
+    res.send(user_list)
+})
+}
+
 
 
 //post create new user Sign-up
@@ -100,6 +134,19 @@ exports.get_user_detail =(req,res,next)=>{
       res.send(user_list)
   })
 }
+
+//get user simplified email and username only
+exports.get_user_detail_simplified =(req,res,next)=>{
+  User.find({ _id : req.params.userId},({  email : 1,username : 1}))
+  .exec(function(err,user_list){
+      if(err){
+          return next(err);
+      }
+      //sucess
+      res.send(user_list)
+  })
+}
+
 
  // put update user username
 exports.put_update_username = ((req,res)=>{

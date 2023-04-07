@@ -25,26 +25,28 @@ const imgModel = require('./models/images');
 
 
 // router import
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var postsRouter =  require('./routes/posts');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const postsRouter =  require('./routes/posts');
 //var imagesRouter = require('./routes/images');
-var commentsRouter = require('./routes/comments');
-
+const commentsRouter = require('./routes/comments');
+const chatRoomRouter= require('./routes/chatRoom');
+const messageRouter = require('./routes/message');
+const userChatRouter = require('./routes/userChat');
 
 
 var app = express();
 
 app.use(cors({
 
-  origin : 'https://friendface.vercel.app',
+  origin : 'http://localhost:3000',
 
   credentials : true
 }));
 
 //integrate MONGO DB
 const mongoose = require("mongoose");
- const mongoDB = process.env.DATABASE_URL;   
+const mongoDB = process.env.DATABASE_URL;   
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
@@ -117,7 +119,10 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 //app.use('/images', imagesRouter);
 app.use('/comments',commentsRouter);
-
+app.use('/chatRoom',chatRoomRouter);
+app.use('/message',messageRouter);
+app.use('/userChat',userChatRouter);
+ 
 
 /* <-----------LOGIN USER SECTION ----------------------------------> */
 app.get('/users/login',(req,res)=>{
@@ -198,7 +203,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           else {
                //item.save();
                console.log('updated');
-               res.redirect('https://friendface.vercel.app/profile');
+               res.redirect('http://localhost:3000/profile');
               
           }
       }); 
