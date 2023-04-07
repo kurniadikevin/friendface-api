@@ -39,7 +39,7 @@ var app = express();
 
 app.use(cors({
 
-  origin : 'http://localhost:3000',
+  origin : 'https://odin-book-api-production.up.railway.app',
 
   credentials : true
 }));
@@ -203,7 +203,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           else {
                //item.save();
                console.log('updated');
-               res.redirect('http://localhost:3000/profile');
+               res.redirect('https://odin-book-api-production.up.railway.app/profile');
               
           }
       }); 
