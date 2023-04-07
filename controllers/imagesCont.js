@@ -45,7 +45,7 @@ exports.post_upload_image = (upload.single('image'), (req, res, next) => {
         }
         else {
              //item.save();
-             res.redirect('https://odin-book-api-production.up.railway.app/profile');
+             res.redirect('https://friendface.vercel.app/profile');
         }
     });
   })

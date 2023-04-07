@@ -259,7 +259,7 @@ exports.get_user_profile_picture_byId=((req,res,next)=>{
           next(err);
       }
       //sucess
-      res.redirect(`https://odin-book-api-production.up.railway.app/${imageName}`)
+      res.redirect(`https://friendface.vercel.app/${imageName}`)
   })
 })
 

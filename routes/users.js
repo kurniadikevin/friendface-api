@@ -58,7 +58,7 @@ router.get('/auth/facebook', passport.authenticate('facebook', {
 
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
-    successRedirect: 'https://odin-book-api-production.up.railway.app/',
+    successRedirect: 'https://friendface.vercel.app/',
     failureRedirect: '/error'
   }));
 

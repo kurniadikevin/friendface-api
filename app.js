@@ -38,9 +38,7 @@ const userChatRouter = require('./routes/userChat');
 var app = express();
 
 app.use(cors({
-
-  origin : 'https://odin-book-api-production.up.railway.app',
-
+  origin : 'https://friendface.vercel.app',
   credentials : true
 }));
 
@@ -203,7 +201,7 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           else {
                //item.save();
                console.log('updated');
-               res.redirect('https://odin-book-api-production.up.railway.app/profile');
+               res.redirect('https://friendface.vercel.app/profile');
               
           }
       }); 
