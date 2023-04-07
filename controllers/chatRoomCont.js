@@ -34,7 +34,8 @@ exports.find_chat_room_byId=(req,res,next)=>{
 //POST make chatroom between current user and specific user for two user
 exports.create_new_private_chat_room=((req,res,next)=>{
  const data= new ChatRoom({
-    membersId : [req.body.currentUser, req.params.userId]
+    membersId : [req.body.currentUser, req.params.userId],
+   
     })
     data.save((err,result)=>{
         if(err){
@@ -47,16 +48,18 @@ exports.create_new_private_chat_room=((req,res,next)=>{
 })
 
 //POST make chatroom group
+// admin current user can be accessed by first element of array
 exports.create_new_group_chat_room=((req,res,next)=>{
     const data= new ChatRoom({
-       membersId : [req.body.currentUser, ...req.body.userIdArr]
+       membersId : [req.body.currentUser, ...req.body.userIdArr],
+       groupName : req.body.groupName
        })
-       data.save(err=>{
+       data.save((err,result)=>{
            if(err){
                return next(err);
            } else{
-               console.log('chat room created')
-               res.sendStatus(200)
+               console.log(result);
+               res.send(result);
            }
        })
    })
