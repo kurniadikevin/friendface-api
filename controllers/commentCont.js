@@ -35,7 +35,7 @@ const User= require('../models/users');
           postId : req.params.postId,
           byUser : req.body.commentBy,
           action : 'Commented',
-          date : Date.now()
+          date : Date.now(),
         }
         if(err){
           return next(err)

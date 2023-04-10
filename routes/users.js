@@ -42,6 +42,12 @@ router.post('/friendRequest/accept/:userId',users_controller.post_accept_friend_
 //POST decline friend request
 router.post('/friendRequest/decline/:userId',users_controller.post_decline_friend_request);
 
+//POST clear notification unseen
+router.post('/seenNotification/:userId',users_controller.post_seenAt_notification_update);
+
+//POST clear friendRequest notif unseen
+router.post('/seenFriendReqNotif/:userId',users_controller.friendRequest_seenAt_notification_update);
+
 
   /* <------------------------FACEBOOK AUTHENTICATION ------------------> */
 router.get('/fb/profile', isLoggedIn, function (req, res) {
