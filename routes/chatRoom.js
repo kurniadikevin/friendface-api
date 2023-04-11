@@ -14,4 +14,7 @@ router.post('/createPrivate/:userId', chatRoom_controller.create_new_private_cha
 //POST create new group chat room
 router.post('/createGroup', chatRoom_controller.create_new_group_chat_room);
 
+//POST seeing message clear notification
+router.post('/seen/:chatRoomId', chatRoom_controller.seen_messages_notification_chat_room);
+
 module.exports = router;

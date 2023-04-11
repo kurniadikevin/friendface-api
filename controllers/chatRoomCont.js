@@ -1,4 +1,5 @@
 const ChatRoom = require('../models/chatRoom');
+const UserChat= require('../models/userChat');
 
 //GET chatroom list
 exports.find_chat_room_list_all=(req,res,next)=>{
@@ -64,4 +65,17 @@ exports.create_new_group_chat_room=((req,res,next)=>{
        })
    })
 
+exports.seen_messages_notification_chat_room=(req,res,next)=>{
+  
+  UserChat.updateMany({userId : req.body.currentUser},
+    {$pull : {messageNotification : {  chatRoomId :  req.params.chatRoomId  }}},
+    function(err){
+        if(err){
+            return next(err);
+        } else{
+            res.send(`Chat room with id ${req.params.chatRoomId} seen and removed from notification` );
+        }
+    }
+ )
+}
 
