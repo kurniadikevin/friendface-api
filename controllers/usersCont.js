@@ -249,7 +249,10 @@ exports.post_decline_friend_request=((req,res,next)=>{
 exports.get_user_profile_picture_byId=((req,res,next)=>{
   User.find({ _id : req.params.userId},({ _id : 0, password : 0,friends: 0,friendRequest: 0}))
   .exec(function(err,user_list){
-     let imageName= user_list[0].profilePicture;
+    let imageName;
+     if(user_list){
+       imageName= user_list[0].profilePicture;
+     }
      if(!imageName){
       imageName='noPicture.png';
      }
