@@ -66,7 +66,7 @@ exports.create_new_group_chat_room=((req,res,next)=>{
    })
 
 exports.seen_messages_notification_chat_room=(req,res,next)=>{
-  
+
   UserChat.updateMany({userId : req.body.currentUser},
     {$pull : {messageNotification : {  chatRoomId :  req.params.chatRoomId  }}},
     function(err){
