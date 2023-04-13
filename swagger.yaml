@@ -332,3 +332,175 @@ paths:
             required: true
             schema:
               type: string  
+
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all user data
+      description: Get all post data on one endpoint
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid 
+
+
+
+
+components:
+  schemas:
+    Posts:
+      required:
+        - text
+        - author
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6374e91e5ffbe2e45ddf4045
+        text:
+          type: string
+          example: Hello world
+        author:
+           $ref: '#/components/schemas/Users'
+        date:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+        likes:
+          type: array
+          example: [postId : '6374e91e5ffbe2e45ddf4045', byUser : "6367b17ab6704e28258dddf4",action : 'Liked',date : '2022-11-05T06:47:02.421+00:00' ]
+        comment:
+           $ref: '#/components/schemas/Comment'
+        imageContent:
+          type: string
+          description: link to image content
+
+    Users:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6374e91e5ffbe2e45ddf4045
+        username:
+          type: string
+          example: TestAccount
+        email:
+          type: string
+          example: guest@gmail.com
+        password:
+          type: string
+          example: 123456
+        friends:
+          type: array
+          example: [{_id: "6374e91e5ffbe2e45ddf4045", email: "guest@gmail.com", username: "TestAccount",…}]
+        profilePicture:
+          type: string
+          description: url for profile picture
+        friendRequest:
+          type: array
+          example: [{ seenAt: '1681281189976', sender: {_id: "6414298aa9d5395dc8c79c6a"},status: "pending"}]
+        postNotification:
+          type: array
+          example: [{action: "Liked", byUser : {_id: "6367b17ab6704e28258dddf4"}, postId : "6419ab32b8a9bb03162c3968", seenAt: '1681306103830'}]
+
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6374e91e5ffbe2e45ddf4045
+        text:
+          type: string
+          example: Hello world
+        author:
+           $ref: '#/components/schemas/Users'
+        date:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+        likes:
+          type: array
+          example: [postId : '6374e91e5ffbe2e45ddf4045', byUser : "6367b17ab6704e28258dddf4",action : 'Liked',date : '2022-11-05T06:47:02.421+00:00' ]
+        comment:
+          type: array
+    
+    UserChat:
+       type: object
+       properties:
+        _id:
+          type: string
+          example: 642d6378863dd8b88a7b29b5
+        userId:
+           $ref: '#/components/schemas/Users'
+        chatRoomList:
+          type: array
+          items:
+             $ref: '#/components/schemas/ChatRoom'
+        messageNotification:
+          type: array
+          example: [{chatRoomId: 642fb986102f4e8633f2b32d,authorId: 6374e91e5ffbe2e45ddf4045}]
+    
+    ChatRoom:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 642c2c593abefd2cfd40152e
+        membersId:
+          type: array
+          example: [641c56365cb3f5c766ebbb4b,6374e91e5ffbe2e45ddf4045]
+          description: array containing of usersId can be contain more than 2 on grop chat and 2 on private chat
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+          description: default value is date now (date when chatroom created)
+        modifiedAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+        messagesId:
+          type: array
+          items:
+            $ref: '#/components/schemas/Messages'
+        groupName:
+          type: string
+          example: Whitelist group
+
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 64243a73730d4246b6bab4ac
+        author:
+           $ref: '#/components/schemas/Users'
+        text:
+          type: string
+          example: Good morning world
+        mediaContentUrl:
+          type: string
+          description: url of file for media on messages
+        chatRoomId:
+          $ref: '#/components/schemas/ChatRoom'
+        sendAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+          description: default value is the time of data created
+        readAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
