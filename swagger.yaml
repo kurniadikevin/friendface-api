@@ -351,6 +351,124 @@ paths:
                   $ref: '#/components/schemas/Users'       
         '400':
           description: Invalid 
+  
+  /users/search:
+    get:
+      tags:
+        - users
+      summary: Get all user data
+      description: Get all user data only email,username, and _id for query searching 
+      operationId: getAllUsersForSearch
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid 
+
+  /users/recent:
+    get:
+      tags:
+        - users
+      summary: Get top 5 new user
+      description: Get recently created user limit by 5
+      operationId: getUserRecent
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid
+
+  /users/popular:
+    get:
+      tags:
+        - users
+      summary: Get top 5 popular user
+      description: Get top most friends count user limit by 5
+      operationId: getUserPopular
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid 
+
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      summary: Get specific user 
+      description: Get specific user detail by userId input
+      operationId: getUserDetail
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array  
+                items:
+                  $ref: '#/components/schemas/Users'     
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/simplified/{userId}:
+    get:
+      tags:
+        - users
+      summary: Get specific user simplified 
+      description: Get specific user detail by userId with only output email id and username
+      operationId: getUserDetailSimplified
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array  
+                items:
+                  $ref: '#/components/schemas/Users'     
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+
+
+
+
+
+
 
 
 

@@ -9,14 +9,11 @@ router.get('/', users_controller.get_user_all);
 //get user for query
 router.get('/search',users_controller.get_user_search_data);
 
-//test
+//GET top 5 newly created user
 router.get('/recent',users_controller.get_new_user);
 
-//test
+//GET user by top 5 friends count
 router.get('/popular',users_controller.get_popular_user);
-
-//POST create new user
-router.post('/signup',users_controller.post_new_user);
 
 // GET user detail
 router.get('/:userId', users_controller.get_user_detail);
@@ -27,7 +24,10 @@ router.get('/simplified/:userId', users_controller.get_user_detail_simplified);
 //GET user profile picture with Id parameter input
 router.get('/profilePicture/:userId', users_controller.get_user_profile_picture_byId);
 
-//PUT update user username
+//POST create new user
+router.post('/signup',users_controller.post_new_user);
+
+//POSTT update user username
 router.post('/update/:userId',users_controller.put_update_username)
 
 //PUT update user profilePicure
