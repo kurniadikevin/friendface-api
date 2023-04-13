@@ -36,6 +36,9 @@ tags:
 
   - name : message
     description: Operations about userChat for messager 
+  
+  - name : images
+    description: Operation for storing image on API from few different endpoint
 
 paths:
   /posts:
@@ -452,6 +455,303 @@ paths:
                 type: array  
                 items:
                   $ref: '#/components/schemas/Users'     
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/profilePicture/{userId}:
+    get:
+      tags:
+        - users
+      summary: Get user profilePicture 
+      description:  Get user profilePicture by userId
+      operationId: getUserDetailProfilePicture
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/signup:
+    post:
+      tags:
+        - users
+      summary: Make new user
+      description: Make new user with email and password 
+      operationId: signupUser
+      requestBody:
+        description: Sign up new user
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation new user created
+          content:
+            application/json:
+        '400':
+          description: Invalid
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Login user
+      description: Login user with email and password
+      operationId: loginUser
+      requestBody:
+        description: Log in new user
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation user logged-in
+          content:
+            application/json:
+        '400':
+          description: Invalid
+
+  /users/update/{userId}:
+    post:
+      tags:
+        - users
+      summary: Update user username
+      description:  Update user username with userId parameter and username body 
+      operationId: updateUsername
+      requestBody:
+        description: New user value
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation username updated
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/update/profilePicture/{userId}:
+    post:
+      tags:
+        - users
+      summary: Update user profilePicture
+      description:  Update user profilePictur with userId parameter 
+      operationId: updateUserProfilePicture
+      requestBody:
+        description: Log in new user
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  profilePicture:
+                    type: file
+      responses:
+        '200':
+          description: Successful operation profile picture updated
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/friendRequest/{userId}:
+    post:
+      tags:
+        - users
+      summary: Send friend request
+      description:  Send friend request with userId
+      operationId: sendFriendRequest
+      requestBody:
+        description: Send friend request with userId
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  requestData:
+                    type: object
+                    example : {
+                      status : "pending",
+                      senderInfo :
+                      {_id : data.sender._id,username : data.sender.username,email : data.sender.email}
+                    }
+                  
+      responses:
+        '200':
+          description: Successful operation friend request send
+          content:
+            application/json:
+              schema: 
+                type: object
+                example: {seenAt : 1681281189976 ,sender: {_id: "6414298aa9d5395dc8c79c6a", username: "Momogi", email: "momogi@gmail.com"},status: "pending"}    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/friendRequest/accept/{userId}:
+    post:
+      tags:
+        - users
+      summary: Accept friend request
+      description:  accept friend request with userId
+      operationId: acceptFriendRequest
+      requestBody:
+        description: accept friend request with userId
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  requestData:
+                    type: object
+                    example : {
+                      status : "pending",
+                      senderInfo :
+                      {_id : data.sender._id,username : data.sender.username,email : data.sender.email}
+                    }
+                  newFriend:
+                    type: object
+                    example: {_id : data.sender._id,username : data.sender.username, email : data.sender.email}
+                  
+      responses:
+        '200':
+          description: Successful operation friend request accepted
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/seenNotification/{userId}:
+    post:
+      tags:
+        - users
+      summary: Seen notification post
+      description:  Remove post notification
+      operationId: seenNotificationPost
+      requestBody:
+        description:  Remove post notification
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation post notification clear
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/seenFriendReqNotif/{userId}:
+    post:
+      tags:
+        - users
+      summary: Seen notification friend request
+      description:  Remove post notification friend request
+      operationId: seenNotificationFriendRequest
+      requestBody:
+        description:  Remove friend request notification
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation friendRequest notification clear
+          content:
+            application/json:
+              schema: 
+                type: file    
         '400':
           description: Invalid 
       parameters:
