@@ -28,7 +28,9 @@
     "passport": "^0.6.0",
     "passport-facebook": "^3.0.0",
     "passport-local": "^1.0.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "swagger-ui-express": "^4.6.2",
+    "yaml": "^2.2.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

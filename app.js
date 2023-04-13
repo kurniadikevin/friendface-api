@@ -11,12 +11,17 @@ const bcrypt =require('bcryptjs');
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-
-var FacebookStrategy = require('passport-facebook');
 var json= require('body-parser');
+
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yaml')
 
 const multer = require('multer');
 var fs = require('fs');
+
+//swagger document input and convert yaml to json
+const file  = fs.readFileSync('./swagger.yaml', 'utf8');
+const swaggerDocument = YAML.parse(file);
 
 //import model
 const User = require('./models/users');
@@ -36,8 +41,10 @@ const userChatRouter = require('./routes/userChat');
 
 
 var app = express();
+
 app.use(cors({
   origin : 'http://localhost:3000',
+  origin : ['http://localhost:3000','https://editor.swagger.io'],
   credentials : true
 }));
 
@@ -61,6 +68,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //make static file for images uploads
 app.use(express.static('uploads'))

@@ -1,0 +1,334 @@
+openapi: 3.0.3
+info:
+  title: Friendface-API v1
+  version: 0.1.0
+  description: |-
+    This API is used for [Friendface](https://friendface.vercel.app/) social media project with use case of doing CRUD to database and store image file. 
+
+    The API handle some social media schema including post, comment, like, user, userChat, messages, notification, messages notification, and chat room.
+    
+    In general the data have two different category. One for social media posting format and the other is of the messager feature.
+    
+    _Some related link:_
+    - [Friendface-client repository](https://github.com/kurniadikevin/friendface-client)
+    - [Friendface App](https://friendface.vercel.app/)
+    - [Developer](https://github.com/kurniadikevin)
+    
+ 
+
+servers:
+  - url: http://localhost:5000
+tags:
+  - name: posts
+    description: Operation for posts route
+    
+  - name: users
+    description: Operation for users route
+    
+  - name: comments
+    description: Operations for comments route
+
+  - name : userChat
+    description: Operations about userChat for messager 
+
+  - name : chatRoom
+    description: Operations about chatRoom for messager 
+
+  - name : message
+    description: Operations about userChat for messager 
+
+paths:
+  /posts:
+    get:
+      tags:
+        - posts
+      summary: Get all post
+      description: Get all post data on one endpoint
+      operationId: getAllPosts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array       
+        '400':
+          description: Invalid 
+
+  /posts/page/{pageNumber}:
+    get:
+      tags:
+        - posts
+      summary: Get all post
+      description: Get all post data on page format per 10 posts
+      operationId: getAllPostsWithPage
+      parameters:
+        - name: pageNumber
+          in: path
+          description: page number of post
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                
+        '400':
+          description: Invalid 
+
+  /posts/postDetail/{postId}/page/1:
+    get:
+      tags:
+        - posts
+      summary: Get post detail
+      description: Get specific post detail
+      operationId: getPostDetail
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array       
+        '400':
+          description: Invalid 
+      parameters:
+        - name: postId
+          in: path
+          description: postId of the post needed
+          required: true
+          schema:
+            type: string
+
+  /posts/friends/{userId}:
+      get:
+        tags:
+          - posts
+        summary: Get post for friends of specific user
+        description: Get friend post by user with userId
+        operationId: getPostFriends
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find friends post of
+            required: true
+            schema:
+              type: string
+
+  /posts/friends/{userId}/page/{pageNumber}:
+      get:
+        tags:
+          - posts
+        summary: Get post for friends of specific user with paganation
+        description: Get friend post by user with userId with paganation
+        operationId: getPostFriendsPages
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find friends post of
+            required: true
+            schema:
+              type: string
+
+          - name: pageNumber
+            in: path
+            description: page number of post query
+            required: true
+            schema:
+              type: integer
+              format: int64
+
+  /posts/{userId}:
+      get:
+        tags:
+          - posts
+        summary: Get user post
+        description: Get post than the author id is userId
+        operationId: getPostFriends
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find post 
+            required: true
+            schema:
+              type: string  
+
+  /posts/byUser/{userId}/page/{pageNumber}:
+      get:
+        tags:
+          - posts
+        summary: Get post specific user with paganation
+        description: Get post by user with userId with paganation
+        operationId: getPostUserPages
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find friends post of
+            required: true
+            schema:
+              type: string
+
+          - name: pageNumber
+            in: path
+            description: page number of post query
+            required: true
+            schema:
+              type: integer
+              format: int64
+
+  /posts/{userId}/count:
+      get:
+        tags:
+          - posts
+        summary: Get user post count
+        description: Get post than the author id is userId total post
+        operationId: getPostFriendsCount
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find post 
+            required: true
+            schema:
+              type: string  
+
+  /posts/newpost:
+    post:
+      tags:
+        - posts
+      summary: Make new post
+      description: Make new post with input of user data and post data 
+      operationId: postNewPost
+      requestBody:
+        description: Create a new post with text and authorId on author
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+             schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                    example: Hello world 
+                  author:
+                    type: string 
+                    example: (insert author id)  
+        '400':
+          description: Invalid 
+
+  /posts/delete/{postId}:
+      get:
+        tags:
+          - posts
+        summary: Delete post by Id
+        description: Delete specific post using postId
+        operationId: deletePostById
+        responses:
+          '200':
+            description: Post sucessfully deleted
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Error delete
+        parameters:
+          - name: postId
+            in: path
+            description: postId of post you want to delete 
+            required: true
+            schema:
+              type: string  
+
+  /posts/likes/{postId}:
+      get:
+        tags:
+          - posts
+        summary: Like post by Id
+        description: Like specific post using postId
+        operationId: LikePostById
+        requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+        responses:
+          '200':
+            description: Post sucessfully liked
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Error delete
+        parameters:
+          - name: postId
+            in: path
+            description: postId of post you want to liked
+            required: true
+            schema:
+              type: string  
