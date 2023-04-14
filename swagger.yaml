@@ -763,6 +763,475 @@ paths:
           schema:
             type: string
 
+  /comments/createComment/{postId}:
+    post:
+      tags:
+        - comments
+      summary: Create comment on the post
+      description:  Create comment on the post with postId parameter
+      operationId: createNewComment
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        parameters:
+        - name: postId
+          in: path
+          description: postId of the post needed
+          required: true
+          schema:
+            type: string
+
+  /userChat/all:
+    get:
+      tags:
+        - userChat
+      summary: Get all userChat
+      description: Get all userChat data on one endpoint
+      operationId: getAllUserChat
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/UserChat'     
+        '400':
+          description: Invalid 
+
+  /userChat/byUserChatId/{userChatId}:
+    get:
+      tags:
+        - userChat
+      summary: Get userChat data
+      description: Get userChat data with userChatId
+      operationId: getUserChatbyId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/UserChat'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: userChatId
+          in: path
+          description: userChatId to find
+          required: true
+          schema:
+            type: string
+
+  /userChat/byUserId/{userId}:
+    get:
+      tags:
+        - userChat
+      summary:  Get userChat data 
+      description: Get userChat data with userId
+      operationId: getUserChatByUserId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/UserChat'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /userChat/create/{userId}:
+    post:
+      tags:
+        - userChat
+      summary: Create new userChat
+      description:  Create new userChat with parameter userId and populate chatroomList
+      operationId: createNewUserChat
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /userChat/update/{userId}:
+    post:
+      tags:
+        - userChat
+      summary: Update userChat
+      description: Update userChat  with userId parameter and populate chatroomList
+      operationId: updateUserChat
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /test/{userId}:
+    post:
+      tags:
+        - userChat
+      summary: Testing for populate userChat
+      description: Testing for populate userChat chatRoomList
+      operationId: testPopulateUserChat
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /chatRoom/all:
+    get:
+      tags:
+        - chatRoom
+      summary: Get all chatRoom
+      description: Get all chatRoom data on one endpoint
+      operationId: getAllChatRoom
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/ChatRoom'     
+        '400':
+          description: Invalid 
+
+  /byId/{chatRoomId}:
+    get:
+      tags:
+        - chatRoom
+      summary: Get chatRoom by Id
+      description: Get chatRoom by Id
+      operationId: getChatRoomById
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/ChatRoom'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: chatRoomId to find
+          required: true
+          schema:
+            type: string
+
+  /chatRoom/createPrivate/{userId}:
+    post:
+      tags:
+        - chatRoom
+      summary: Create new private chatRoom
+      description:  Create new private chatRoom with userId and req.body.currentUser
+      operationId: createNewPrivateChatRoom
+      responses:
+        '200':
+          description: Successful private chatroom created 
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to make private chat room with
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+
+  /chatRoom/createGroup:
+    post:
+      tags:
+        - chatRoom
+      summary: Create new group chatRoom
+      description:  Create new group chatRoom with body.currentUser and body.userIdArr
+      operationId: createNewGroupChatRoom
+      responses:
+        '200':
+          description: Successful private chatroom created 
+        '400':
+          description: Invalid 
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                  userIdArr:
+                    type: array
+                    example: [userId, userId]  
+
+  /chatRoom/seen/{chatRoomId}:
+    post:
+      tags:
+        - chatRoom
+      summary: Seen ChatRoom 
+      description:  Seen chatroom for clear notification with body.currentUser
+      operationId: seenChatRoom
+      responses:
+        '200':
+          description: Successful private chatroom created 
+        '400':
+          description: Invalid 
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                    description: current user, user id target 
+
+  /message/all:
+    get:
+      tags:
+        - message
+      summary: Get all messages
+      description: Get all messages data on one endpoint
+      operationId: getAllMessages
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/Message'     
+        '400':
+          description: Invalid
+
+  /message/byId/{messageId}:
+    get:
+      tags:
+        - message
+      summary: Get messages by Id
+      description: Get messages by Id using messageId parameter
+      operationId: getMessageById
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/Message'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: messageId
+          in: path
+          description: target messageId
+          required: true
+          schema:
+            type: string
+
+  /message/new/{chatRoomId}:
+    post:
+      tags:
+        - message
+      summary: Crete new message
+      description: Crete new message with parameter chatRoomId and body messageSchema
+      operationId: createMessage
+      responses:
+        '200':
+          description: Successful operation message created     
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+                  text:
+                    type: string
+                    example: hello good morning
+                  mediaUrl:
+                    type: string
+                    description: url of media content
+ 
+  /message/test/{chatRoomId}:
+    post:
+      tags:
+        - message
+      summary: Testing endpoint for push message notification
+      description: Testing endpoint for push message notification
+      operationId: testMessageNotif
+      responses:
+        '200':
+          description: Successful operation   
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+
+  /images:
+    post:
+      tags:
+        - image
+      summary: Upload new image for profile picture
+      description: Upload new image for profile picture
+      operationId: newImageProfilePicture
+      responses:
+        '200':
+          description: Successful operation message created     
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: id of user that update profile picture
+                  byUser:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+                  name:
+                    type: string
+                  desc:
+                    type: string
+                  url:
+                    type: string
+                    description: url of image 
+                  fileName:
+                    type: string
+                    format: binary
+
+  /postImages:
+    post:
+      tags:
+        - image 
+        - posts
+      summary: Upload new image for post
+      description: Upload new image for post with text content for post
+      operationId: newImagePost
+      responses:
+        '200':
+          description: Successful operation message created     
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                 authorId:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+                 text:
+                    type: string
+                 fileName:
+                    type: string
+                    format: binary
+
+
 
 
 
