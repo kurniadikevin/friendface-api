@@ -7,7 +7,7 @@ info:
 
     The API handle some social media schema including post, comment, like, user, userChat, messages, notification, messages notification, and chat room.
     
-    In general the data have two different category. One for social media posting format and the other is of the messager feature.
+    In general the data have two different category. One for social media data and the other one is of the messager feature.
     
     _Some related link:_
     - [Friendface-client repository](https://github.com/kurniadikevin/friendface-client)
@@ -1155,7 +1155,7 @@ paths:
   /images:
     post:
       tags:
-        - image
+        - images
       summary: Upload new image for profile picture
       description: Upload new image for profile picture
       operationId: newImageProfilePicture
@@ -1173,7 +1173,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
              schema:
                 type: object
                 properties:
@@ -1198,7 +1198,7 @@ paths:
   /postImages:
     post:
       tags:
-        - image 
+        - images 
         - posts
       summary: Upload new image for post
       description: Upload new image for post with text content for post
@@ -1208,16 +1208,9 @@ paths:
           description: Successful operation message created     
         '400':
           description: Invalid
-      parameters:
-        - name: chatRoomId
-          in: path
-          description: target chatRoomId
-          required: true
-          schema:
-            type: string
       requestBody:
         content:
-          application/json:
+           application/json:
              schema:
                 type: object
                 properties:
@@ -1227,12 +1220,13 @@ paths:
                     example: 6364fff02066d5b0ca6ddb7d
                  text:
                     type: string
+           multipart/form-data:
+             schema:
+                type: object
+                properties:
                  fileName:
                     type: string
                     format: binary
-
-
-
 
 
 
