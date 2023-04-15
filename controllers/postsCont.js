@@ -42,12 +42,18 @@ exports.post_list = (req, res,next) => {
             return next(err);
         }
         // find post that author is equal to friend userId
-        let queryList = (user_list[0].friends).map((friend)=>{
+        const queryList =()=>{ if((user_list[0].friends).length > 0){
+         const result= (user_list[0].friends).map((friend)=>{
           return { 'author' : friend}
           });
+          return result;
+        } else {
+          return [{ 'author' : req.params.userId}]
+        }
+      }
 
         Post.find({ 
-          $or: [ {$or : queryList}, { 'author' : req.params.userId}]
+          $or: [ {$or : queryList()}, { 'author' : req.params.userId}]
         }, "")
         .sort({ date: -1 })
         .populate("comment")
@@ -71,12 +77,18 @@ exports.post_list = (req, res,next) => {
             return next(err);
         }
         // find post that author is equal to friend email
-        let queryList = (user_list[0].friends).map((friend)=>{
+        const queryList =()=>{ if((user_list[0].friends).length > 0){
+         const result= (user_list[0].friends).map((friend)=>{
           return { 'author' : friend}
           });
-
+          return result;
+        } else {
+          return [{ 'author' : req.params.userId}]
+        }
+      }
+        
         Post.find({ 
-          $or: [ {$or : queryList}, { 'author' : req.params.userId}]
+          $or: [ {$or : queryList()}, { 'author' : req.params.userId}]
         }, "")
         .sort({ date: -1 })
         .populate("comment")
