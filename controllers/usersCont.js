@@ -93,7 +93,6 @@ exports.get_popular_user = (req,res,next)=>{
 }
 
 
-
 //post create new user Sign-up
 exports.post_new_user=(async (req,res,next)=>{
 
@@ -121,8 +120,6 @@ const emailExist = await User.find({ email : {$eq :req.body.email}});
   }
 )
 
-
-
 //get user detail by id
 exports.get_user_detail =(req,res,next)=>{
   User.find({ _id : req.params.userId},({ _id : 0, password : 0}))
@@ -134,6 +131,7 @@ exports.get_user_detail =(req,res,next)=>{
       res.send(user_list)
   })
 }
+
 
 //get user simplified email and username only
 exports.get_user_detail_simplified =(req,res,next)=>{
@@ -149,7 +147,7 @@ exports.get_user_detail_simplified =(req,res,next)=>{
 
 
  // put update user username
-exports.put_update_username = ((req,res)=>{
+exports.put_update_username = ((req,res,next)=>{
   const user =  {
     username : req.body.username,
     _id : req.body._id
@@ -251,7 +249,10 @@ exports.post_decline_friend_request=((req,res,next)=>{
 exports.get_user_profile_picture_byId=((req,res,next)=>{
   User.find({ _id : req.params.userId},({ _id : 0, password : 0,friends: 0,friendRequest: 0}))
   .exec(function(err,user_list){
-     let imageName= user_list[0].profilePicture;
+    let imageName;
+     if(user_list){
+       imageName= user_list[0].profilePicture;
+     }
      if(!imageName){
       imageName='noPicture.png';
      }
@@ -263,3 +264,62 @@ exports.get_user_profile_picture_byId=((req,res,next)=>{
   })
 })
 
+// post read notification update to clear
+exports.post_seenAt_notification_update=((req,res,next)=>{
+  // find post notification value
+  User.find({ _id : req.params.userId},({  postNotification : 1, _id : 0}))
+  .exec(function(err,list){
+      if(err){
+          return next(err);
+      }
+      //sucess get post notificationList
+      const postNotificationList= list[0].postNotification;
+      const updateList= postNotificationList;
+      updateList.forEach(function (element) {
+        element.seenAt = Date.now();
+      });
+      const update={
+        postNotification : updateList
+      }
+      User.findByIdAndUpdate(req.params.userId,update,{},(err, post) => {
+        if (err) {
+          return next(err);
+        }
+        // Successful: 
+        console.log('clear notification seen,updated ')
+        res
+          .status(200)
+          .end();
+      });
+  }) 
+});
+
+// friendRequest read notification update to clear
+exports.friendRequest_seenAt_notification_update=((req,res,next)=>{
+  // find post notification value
+  User.find({ _id : req.params.userId},({  friendRequest : 1, _id : 0}))
+  .exec(function(err,list){
+      if(err){
+          return next(err);
+      }
+      //sucess get post notificationList
+      const friendReqNotificationList= list[0].friendRequest;
+      const updateList= friendReqNotificationList;
+      updateList.forEach(function (element) {
+        element.seenAt = Date.now();
+      });
+      const update={
+        friendRequest : updateList
+      }
+      User.findByIdAndUpdate(req.params.userId,update,{},(err, post) => {
+        if (err) {
+          return next(err);
+        }
+        // Successful: 
+        console.log('clear notification seen,updated ')
+        res
+          .status(200)
+          .end();
+      });
+  }) 
+});

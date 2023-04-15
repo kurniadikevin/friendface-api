@@ -42,12 +42,18 @@ exports.post_list = (req, res,next) => {
             return next(err);
         }
         // find post that author is equal to friend userId
-        let queryList = (user_list[0].friends).map((friend)=>{
+        const queryList =()=>{ if((user_list[0].friends).length > 0){
+         const result= (user_list[0].friends).map((friend)=>{
           return { 'author' : friend}
           });
+          return result;
+        } else {
+          return [{ 'author' : req.params.userId}]
+        }
+      }
 
         Post.find({ 
-          $or: [ {$or : queryList}, { 'author' : req.params.userId}]
+          $or: [ {$or : queryList()}, { 'author' : req.params.userId}]
         }, "")
         .sort({ date: -1 })
         .populate("comment")
@@ -71,12 +77,18 @@ exports.post_list = (req, res,next) => {
             return next(err);
         }
         // find post that author is equal to friend email
-        let queryList = (user_list[0].friends).map((friend)=>{
+        const queryList =()=>{ if((user_list[0].friends).length > 0){
+         const result= (user_list[0].friends).map((friend)=>{
           return { 'author' : friend}
           });
-
+          return result;
+        } else {
+          return [{ 'author' : req.params.userId}]
+        }
+      }
+        
         Post.find({ 
-          $or: [ {$or : queryList}, { 'author' : req.params.userId}]
+          $or: [ {$or : queryList()}, { 'author' : req.params.userId}]
         }, "")
         .sort({ date: -1 })
         .populate("comment")
@@ -107,20 +119,6 @@ exports.post_list = (req, res,next) => {
      res.send(post_list);
     });
   }
-
-  //POST delete specific post by Author
-  exports.post_detail_delete=(req,res,next)=>{
-    Post.findOneAndDelete({_id :{ $eq : req.params.postId}},
-      function(err,docs){
-        if(err){
-          return next(err)
-        } else{
-          console.log('Deleted : ',docs);
-          res.send(200);
-        }
-    })
-  }
-
 
   //GET user post
   exports.user_post_list= (req,res,next)=>{
@@ -177,6 +175,19 @@ exports.post_list = (req, res,next) => {
       if(err){
         return next(err);
       }
+    })
+  }
+
+  //POST delete specific post by Author
+  exports.post_detail_delete=(req,res,next)=>{
+    Post.findOneAndDelete({_id :{ $eq : req.params.postId}},
+      function(err,docs){
+        if(err){
+          return next(err)
+        } else{
+          console.log('Deleted : ',docs);
+          res.send(200);
+        }
     })
   }
 

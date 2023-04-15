@@ -1,0 +1,1387 @@
+openapi: 3.0.3
+info:
+  title: Friendface-API v1
+  version: 0.1.0
+  description: |-
+    This API is used for [Friendface](https://friendface.vercel.app/) social media project with use case of doing CRUD to database and store image file. 
+
+    The API handle some social media schema including post, comment, like, user, userChat, messages, notification, messages notification, and chat room.
+    
+    In general the data have two different category. One for social media data and the other one is of the messager feature.
+    
+    _Some related link:_
+    - [Friendface-client repository](https://github.com/kurniadikevin/friendface-client)
+    - [Friendface App](https://friendface.vercel.app/)
+    - [Developer](https://github.com/kurniadikevin)
+    
+ 
+
+servers:
+  - url: http://localhost:5000
+tags:
+  - name: posts
+    description: Operation for posts route
+    
+  - name: users
+    description: Operation for users route
+    
+  - name: comments
+    description: Operations for comments route
+
+  - name : userChat
+    description: Operations about userChat for messager 
+
+  - name : chatRoom
+    description: Operations about chatRoom for messager 
+
+  - name : message
+    description: Operations about userChat for messager 
+  
+  - name : images
+    description: Operation for storing image on API from few different endpoint
+
+paths:
+  /posts:
+    get:
+      tags:
+        - posts
+      summary: Get all post
+      description: Get all post data on one endpoint
+      operationId: getAllPosts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array       
+        '400':
+          description: Invalid 
+
+  /posts/page/{pageNumber}:
+    get:
+      tags:
+        - posts
+      summary: Get all post
+      description: Get all post data on page format per 10 posts
+      operationId: getAllPostsWithPage
+      parameters:
+        - name: pageNumber
+          in: path
+          description: page number of post
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                
+        '400':
+          description: Invalid 
+
+  /posts/postDetail/{postId}/page/1:
+    get:
+      tags:
+        - posts
+      summary: Get post detail
+      description: Get specific post detail
+      operationId: getPostDetail
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array       
+        '400':
+          description: Invalid 
+      parameters:
+        - name: postId
+          in: path
+          description: postId of the post needed
+          required: true
+          schema:
+            type: string
+
+  /posts/friends/{userId}:
+      get:
+        tags:
+          - posts
+        summary: Get post for friends of specific user
+        description: Get friend post by user with userId
+        operationId: getPostFriends
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find friends post of
+            required: true
+            schema:
+              type: string
+
+  /posts/friends/{userId}/page/{pageNumber}:
+      get:
+        tags:
+          - posts
+        summary: Get post for friends of specific user with paganation
+        description: Get friend post by user with userId with paganation
+        operationId: getPostFriendsPages
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find friends post of
+            required: true
+            schema:
+              type: string
+
+          - name: pageNumber
+            in: path
+            description: page number of post query
+            required: true
+            schema:
+              type: integer
+              format: int64
+
+  /posts/{userId}:
+      get:
+        tags:
+          - posts
+        summary: Get user post
+        description: Get post than the author id is userId
+        operationId: getPostFriends
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find post 
+            required: true
+            schema:
+              type: string  
+
+  /posts/byUser/{userId}/page/{pageNumber}:
+      get:
+        tags:
+          - posts
+        summary: Get post specific user with paganation
+        description: Get post by user with userId with paganation
+        operationId: getPostUserPages
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find friends post of
+            required: true
+            schema:
+              type: string
+
+          - name: pageNumber
+            in: path
+            description: page number of post query
+            required: true
+            schema:
+              type: integer
+              format: int64
+
+  /posts/{userId}/count:
+      get:
+        tags:
+          - posts
+        summary: Get user post count
+        description: Get post than the author id is userId total post
+        operationId: getPostFriendsCount
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Invalid 
+        parameters:
+          - name: userId
+            in: path
+            description: userId of user you want to find post 
+            required: true
+            schema:
+              type: string  
+
+  /posts/newpost:
+    post:
+      tags:
+        - posts
+      summary: Make new post
+      description: Make new post with input of user data and post data 
+      operationId: postNewPost
+      requestBody:
+        description: Create a new post with text and authorId on author
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+             schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                    example: Hello world 
+                  author:
+                    type: string 
+                    example: (insert author id)  
+        '400':
+          description: Invalid 
+
+  /posts/delete/{postId}:
+      post:
+        tags:
+          - posts
+        summary: Delete post by Id
+        description: Delete specific post using postId
+        operationId: deletePostById
+        responses:
+          '200':
+            description: Post sucessfully deleted
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Error delete
+        parameters:
+          - name: postId
+            in: path
+            description: postId of post you want to delete 
+            required: true
+            schema:
+              type: string  
+
+  /posts/likes/{postId}:
+      post:
+        tags:
+          - posts
+        summary: Like post by Id
+        description: Like specific post using postId
+        operationId: LikePostById
+        requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+        responses:
+          '200':
+            description: Post sucessfully liked
+            content:
+              application/json:
+                schema: 
+                  type: array       
+          '400':
+            description: Error delete
+        parameters:
+          - name: postId
+            in: path
+            description: postId of post you want to liked
+            required: true
+            schema:
+              type: string  
+
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all user data
+      description: Get all post data on one endpoint
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid 
+  
+  /users/search:
+    get:
+      tags:
+        - users
+      summary: Get all user data
+      description: Get all user data only email,username, and _id for query searching 
+      operationId: getAllUsersForSearch
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid 
+
+  /users/recent:
+    get:
+      tags:
+        - users
+      summary: Get top 5 new user
+      description: Get recently created user limit by 5
+      operationId: getUserRecent
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid
+
+  /users/popular:
+    get:
+      tags:
+        - users
+      summary: Get top 5 popular user
+      description: Get top most friends count user limit by 5
+      operationId: getUserPopular
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'       
+        '400':
+          description: Invalid 
+
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      summary: Get specific user 
+      description: Get specific user detail by userId input
+      operationId: getUserDetail
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array  
+                items:
+                  $ref: '#/components/schemas/Users'     
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/simplified/{userId}:
+    get:
+      tags:
+        - users
+      summary: Get specific user simplified 
+      description: Get specific user detail by userId with only output email id and username
+      operationId: getUserDetailSimplified
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array  
+                items:
+                  $ref: '#/components/schemas/Users'     
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/profilePicture/{userId}:
+    get:
+      tags:
+        - users
+      summary: Get user profilePicture 
+      description:  Get user profilePicture by userId
+      operationId: getUserDetailProfilePicture
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/signup:
+    post:
+      tags:
+        - users
+      summary: Make new user
+      description: Make new user with email and password 
+      operationId: signupUser
+      requestBody:
+        description: Sign up new user
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation new user created
+          content:
+            application/json:
+        '400':
+          description: Invalid
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Login user
+      description: Login user with email and password
+      operationId: loginUser
+      requestBody:
+        description: Log in new user
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation user logged-in
+          content:
+            application/json:
+        '400':
+          description: Invalid
+
+  /users/update/{userId}:
+    post:
+      tags:
+        - users
+      summary: Update user username
+      description:  Update user username with userId parameter and username body 
+      operationId: updateUsername
+      requestBody:
+        description: New user value
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation username updated
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/update/profilePicture/{userId}:
+    post:
+      tags:
+        - users
+      summary: Update user profilePicture
+      description:  Update user profilePictur with userId parameter 
+      operationId: updateUserProfilePicture
+      requestBody:
+        description: Log in new user
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  profilePicture:
+                    type: file
+      responses:
+        '200':
+          description: Successful operation profile picture updated
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/friendRequest/{userId}:
+    post:
+      tags:
+        - users
+      summary: Send friend request
+      description:  Send friend request with userId
+      operationId: sendFriendRequest
+      requestBody:
+        description: Send friend request with userId
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  requestData:
+                    type: object
+                    example : {
+                      status : "pending",
+                      senderInfo :
+                      {_id : data.sender._id,username : data.sender.username,email : data.sender.email}
+                    }
+                  
+      responses:
+        '200':
+          description: Successful operation friend request send
+          content:
+            application/json:
+              schema: 
+                type: object
+                example: {seenAt : 1681281189976 ,sender: {_id: "6414298aa9d5395dc8c79c6a", username: "Momogi", email: "momogi@gmail.com"},status: "pending"}    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/friendRequest/accept/{userId}:
+    post:
+      tags:
+        - users
+      summary: Accept friend request
+      description:  accept friend request with userId
+      operationId: acceptFriendRequest
+      requestBody:
+        description: accept friend request with userId
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  requestData:
+                    type: object
+                    example : {
+                      status : "pending",
+                      senderInfo :
+                      {_id : data.sender._id,username : data.sender.username,email : data.sender.email}
+                    }
+                  newFriend:
+                    type: object
+                    example: {_id : data.sender._id,username : data.sender.username, email : data.sender.email}
+                  
+      responses:
+        '200':
+          description: Successful operation friend request accepted
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/seenNotification/{userId}:
+    post:
+      tags:
+        - users
+      summary: Seen notification post
+      description:  Remove post notification
+      operationId: seenNotificationPost
+      requestBody:
+        description:  Remove post notification
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation post notification clear
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /users/seenFriendReqNotif/{userId}:
+    post:
+      tags:
+        - users
+      summary: Seen notification friend request
+      description:  Remove post notification friend request
+      operationId: seenNotificationFriendRequest
+      requestBody:
+        description:  Remove friend request notification
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation friendRequest notification clear
+          content:
+            application/json:
+              schema: 
+                type: file    
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId of user to find
+          example: 6364fff02066d5b0ca6ddb7d
+          required: true
+          schema:
+            type: string
+
+  /comments/createComment/{postId}:
+    post:
+      tags:
+        - comments
+      summary: Create comment on the post
+      description:  Create comment on the post with postId parameter
+      operationId: createNewComment
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        parameters:
+        - name: postId
+          in: path
+          description: postId of the post needed
+          required: true
+          schema:
+            type: string
+
+  /userChat/all:
+    get:
+      tags:
+        - userChat
+      summary: Get all userChat
+      description: Get all userChat data on one endpoint
+      operationId: getAllUserChat
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/UserChat'     
+        '400':
+          description: Invalid 
+
+  /userChat/byUserChatId/{userChatId}:
+    get:
+      tags:
+        - userChat
+      summary: Get userChat data
+      description: Get userChat data with userChatId
+      operationId: getUserChatbyId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/UserChat'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: userChatId
+          in: path
+          description: userChatId to find
+          required: true
+          schema:
+            type: string
+
+  /userChat/byUserId/{userId}:
+    get:
+      tags:
+        - userChat
+      summary:  Get userChat data 
+      description: Get userChat data with userId
+      operationId: getUserChatByUserId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/UserChat'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /userChat/create/{userId}:
+    post:
+      tags:
+        - userChat
+      summary: Create new userChat
+      description:  Create new userChat with parameter userId and populate chatroomList
+      operationId: createNewUserChat
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /userChat/update/{userId}:
+    post:
+      tags:
+        - userChat
+      summary: Update userChat
+      description: Update userChat  with userId parameter and populate chatroomList
+      operationId: updateUserChat
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /test/{userId}:
+    post:
+      tags:
+        - userChat
+      summary: Testing for populate userChat
+      description: Testing for populate userChat chatRoomList
+      operationId: testPopulateUserChat
+      responses:
+        '200':
+          description: Successful operation comment created   
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to find
+          required: true
+          schema:
+            type: string
+
+  /chatRoom/all:
+    get:
+      tags:
+        - chatRoom
+      summary: Get all chatRoom
+      description: Get all chatRoom data on one endpoint
+      operationId: getAllChatRoom
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/ChatRoom'     
+        '400':
+          description: Invalid 
+
+  /byId/{chatRoomId}:
+    get:
+      tags:
+        - chatRoom
+      summary: Get chatRoom by Id
+      description: Get chatRoom by Id
+      operationId: getChatRoomById
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/ChatRoom'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: chatRoomId to find
+          required: true
+          schema:
+            type: string
+
+  /chatRoom/createPrivate/{userId}:
+    post:
+      tags:
+        - chatRoom
+      summary: Create new private chatRoom
+      description:  Create new private chatRoom with userId and req.body.currentUser
+      operationId: createNewPrivateChatRoom
+      responses:
+        '200':
+          description: Successful private chatroom created 
+        '400':
+          description: Invalid 
+      parameters:
+        - name: userId
+          in: path
+          description: userId to make private chat room with
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+
+  /chatRoom/createGroup:
+    post:
+      tags:
+        - chatRoom
+      summary: Create new group chatRoom
+      description:  Create new group chatRoom with body.currentUser and body.userIdArr
+      operationId: createNewGroupChatRoom
+      responses:
+        '200':
+          description: Successful private chatroom created 
+        '400':
+          description: Invalid 
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                  userIdArr:
+                    type: array
+                    example: [userId, userId]  
+
+  /chatRoom/seen/{chatRoomId}:
+    post:
+      tags:
+        - chatRoom
+      summary: Seen ChatRoom 
+      description:  Seen chatroom for clear notification with body.currentUser
+      operationId: seenChatRoom
+      responses:
+        '200':
+          description: Successful private chatroom created 
+        '400':
+          description: Invalid 
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                    description: current user, user id target 
+
+  /message/all:
+    get:
+      tags:
+        - message
+      summary: Get all messages
+      description: Get all messages data on one endpoint
+      operationId: getAllMessages
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/Message'     
+        '400':
+          description: Invalid
+
+  /message/byId/{messageId}:
+    get:
+      tags:
+        - message
+      summary: Get messages by Id
+      description: Get messages by Id using messageId parameter
+      operationId: getMessageById
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema: 
+                type: array 
+                items:
+                  $ref: '#/components/schemas/Message'     
+        '400':
+          description: Invalid
+      parameters:
+        - name: messageId
+          in: path
+          description: target messageId
+          required: true
+          schema:
+            type: string
+
+  /message/new/{chatRoomId}:
+    post:
+      tags:
+        - message
+      summary: Crete new message
+      description: Crete new message with parameter chatRoomId and body messageSchema
+      operationId: createMessage
+      responses:
+        '200':
+          description: Successful operation message created     
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+                  text:
+                    type: string
+                    example: hello good morning
+                  mediaUrl:
+                    type: string
+                    description: url of media content
+ 
+  /message/test/{chatRoomId}:
+    post:
+      tags:
+        - message
+      summary: Testing endpoint for push message notification
+      description: Testing endpoint for push message notification
+      operationId: testMessageNotif
+      responses:
+        '200':
+          description: Successful operation   
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  currentUser:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+
+  /images:
+    post:
+      tags:
+        - images
+      summary: Upload new image for profile picture
+      description: Upload new image for profile picture
+      operationId: newImageProfilePicture
+      responses:
+        '200':
+          description: Successful operation message created     
+        '400':
+          description: Invalid
+      parameters:
+        - name: chatRoomId
+          in: path
+          description: target chatRoomId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+             schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: id of user that update profile picture
+                  byUser:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+                  name:
+                    type: string
+                  desc:
+                    type: string
+                  url:
+                    type: string
+                    description: url of image 
+                  fileName:
+                    type: string
+                    format: binary
+
+  /postImages:
+    post:
+      tags:
+        - images 
+        - posts
+      summary: Upload new image for post
+      description: Upload new image for post with text content for post
+      operationId: newImagePost
+      responses:
+        '200':
+          description: Successful operation message created     
+        '400':
+          description: Invalid
+      requestBody:
+        content:
+           application/json:
+             schema:
+                type: object
+                properties:
+                 authorId:
+                    type: string
+                    description: current user, user id target
+                    example: 6364fff02066d5b0ca6ddb7d
+                 text:
+                    type: string
+           multipart/form-data:
+             schema:
+                type: object
+                properties:
+                 fileName:
+                    type: string
+                    format: binary
+
+
+
+
+
+
+
+
+
+components:
+  schemas:
+    Posts:
+      required:
+        - text
+        - author
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6374e91e5ffbe2e45ddf4045
+        text:
+          type: string
+          example: Hello world
+        author:
+           $ref: '#/components/schemas/Users'
+        date:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+        likes:
+          type: array
+          example: [postId : '6374e91e5ffbe2e45ddf4045', byUser : "6367b17ab6704e28258dddf4",action : 'Liked',date : '2022-11-05T06:47:02.421+00:00' ]
+        comment:
+           $ref: '#/components/schemas/Comment'
+        imageContent:
+          type: string
+          description: link to image content
+
+    Users:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6374e91e5ffbe2e45ddf4045
+        username:
+          type: string
+          example: TestAccount
+        email:
+          type: string
+          example: guest@gmail.com
+        password:
+          type: string
+          example: 123456
+        friends:
+          type: array
+          example: [{_id: "6374e91e5ffbe2e45ddf4045", email: "guest@gmail.com", username: "TestAccount",…}]
+        profilePicture:
+          type: string
+          description: url for profile picture
+        friendRequest:
+          type: array
+          example: [{ seenAt: '1681281189976', sender: {_id: "6414298aa9d5395dc8c79c6a"},status: "pending"}]
+        postNotification:
+          type: array
+          example: [{action: "Liked", byUser : {_id: "6367b17ab6704e28258dddf4"}, postId : "6419ab32b8a9bb03162c3968", seenAt: '1681306103830'}]
+
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6374e91e5ffbe2e45ddf4045
+        text:
+          type: string
+          example: Hello world
+        author:
+           $ref: '#/components/schemas/Users'
+        date:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+        likes:
+          type: array
+          example: [postId : '6374e91e5ffbe2e45ddf4045', byUser : "6367b17ab6704e28258dddf4",action : 'Liked',date : '2022-11-05T06:47:02.421+00:00' ]
+        comment:
+          type: array
+    
+    UserChat:
+       type: object
+       properties:
+        _id:
+          type: string
+          example: 642d6378863dd8b88a7b29b5
+        userId:
+           $ref: '#/components/schemas/Users'
+        chatRoomList:
+          type: array
+          items:
+             $ref: '#/components/schemas/ChatRoom'
+        messageNotification:
+          type: array
+          example: [{chatRoomId: 642fb986102f4e8633f2b32d,authorId: 6374e91e5ffbe2e45ddf4045}]
+    
+    ChatRoom:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 642c2c593abefd2cfd40152e
+        membersId:
+          type: array
+          example: [641c56365cb3f5c766ebbb4b,6374e91e5ffbe2e45ddf4045]
+          description: array containing of usersId can be contain more than 2 on grop chat and 2 on private chat
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+          description: default value is date now (date when chatroom created)
+        modifiedAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+        messagesId:
+          type: array
+          items:
+            $ref: '#/components/schemas/Messages'
+        groupName:
+          type: string
+          example: Whitelist group
+
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 64243a73730d4246b6bab4ac
+        author:
+           $ref: '#/components/schemas/Users'
+        text:
+          type: string
+          example: Good morning world
+        mediaContentUrl:
+          type: string
+          description: url of file for media on messages
+        chatRoomId:
+          $ref: '#/components/schemas/ChatRoom'
+        sendAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'
+          description: default value is the time of data created
+        readAt:
+          type: string
+          format: date-time
+          example: '2022-11-05T06:47:02.421+00:00'

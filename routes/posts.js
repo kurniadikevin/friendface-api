@@ -17,20 +17,21 @@ router.get('/friends/:userId',posts_controller.post_list_friends);
 //get all friend post with paganation
 router.get('/friends/:userId/page/:pageNumber',posts_controller.post_list_friends_page);
 
+//get  profile user post
+router.get('/:userId', posts_controller.user_post_list);
+
+//get  profile user post with paganation
+router.get('/byUser/:userId/page/:pageNumber', posts_controller.user_post_list_page);
+
+//get profile user post count
+router.get('/:userId/count',posts_controller.user_post_count);
+
+
 //create new post
 router.post('/newpost',posts_controller.create_new_post);
 
 // post delete specific post
 router.post('/delete/:postId',posts_controller.post_detail_delete);
-
-//get  profile user post
-router.get('/:userId', posts_controller.user_post_list);
-
-//get profile user post count
-router.get('/:userId/count',posts_controller.user_post_count);
-
-//get  profile user post with paganation
-router.get('/byUser/:userId/page/:pageNumber', posts_controller.user_post_list_page);
 
 // post like post
 router.post('/likes/:postId',posts_controller.update_post_likes, posts_controller.push_notification_like); 
