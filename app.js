@@ -164,7 +164,9 @@ app.get('/currentUser',(req,res,next)=>{
   }
 });
 
-var upload = multer({ storage: storage });
+  const limits= 5 * 1024;
+  
+var upload = multer({ storage: storage, limits: limits });
 
 //get all images in upload
 app.get('/images', (req, res) => {
@@ -207,9 +209,7 @@ app.post('/images',removeUserProfileImage, upload.single('image'), (req, res, ne
   }/* console.log(fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename))) */
   
   var userImgUrl = {
-    
     profilePicture :  req.file.filename,
-   
   }
   imgModel.create(obj, (err, item) => {
       if (err) {
@@ -224,8 +224,7 @@ app.post('/images',removeUserProfileImage, upload.single('image'), (req, res, ne
           else {
                //item.save();
                console.log('updated');
-               res.redirect('http://localhost:3000/profile');
-              
+               res.redirect('http://localhost:3000/profile');         
           }
       }); 
       }
