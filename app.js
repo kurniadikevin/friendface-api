@@ -164,7 +164,7 @@ app.get('/currentUser',(req,res,next)=>{
   }
 });
 
-  const limits= 5 * 1024;
+  const limits= {fileSize : 5 * 1024}
   
 var upload = multer({ storage: storage, limits: limits });
 
