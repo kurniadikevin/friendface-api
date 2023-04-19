@@ -164,9 +164,11 @@ app.get('/currentUser',(req,res,next)=>{
   }
 });
 
-  const limits= {fileSize : 5 * 1024}
+  const limits= {fileSize : 0.5 * 1024 * 1024}
   
-var upload = multer({ storage: storage, limits: limits });
+var upload = multer({ storage: storage, limits: limits ,fileFilter: function(_req, file, cb){
+  checkFileType(file, cb);
+  }});
 
 //get all images in upload
 app.get('/images', (req, res) => {
@@ -180,6 +182,21 @@ app.get('/images', (req, res) => {
       }
   });
 });
+
+function checkFileType(file, cb){
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif|ico/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null, true);
+  } else {
+    return cb(null, false);
+  }
+}
 
 const removeUserProfileImage=(req,res,next)=>{
   console.log(req.user);
@@ -196,7 +213,7 @@ const removeUserProfileImage=(req,res,next)=>{
 
 
 // post images upload for profile picture
-app.post('/images',removeUserProfileImage, upload.single('image'), (req, res, next) => {
+app.post('/images', upload.single('image'),removeUserProfileImage, (req, res, next) => {
   var obj = {
       byUser : req.body.byUser,
       name: req.body.name,
