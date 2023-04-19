@@ -44,7 +44,7 @@ var app = express();
 
 app.use(cors({
   /* origin : 'http://localhost:3000', */
-  origin : ['http://localhost:3000','https://editor.swagger.io'],
+  origin : ['http://localhost:3000','https://editor.swagger.io','http://127.0.0.1:3000'],
   credentials : true
 }));
 
@@ -179,8 +179,22 @@ app.get('/images', (req, res) => {
   });
 });
 
+const removeUserProfileImage=(req,res,next)=>{
+  console.log(req.user);
+      if(req.user?.profilePicture){
+      console.log('delete');
+      removeImage(req.user.profilePicture);
+      next()
+      } else{
+        console.log('no profile picture found');
+        next()
+      }
+  }
+
+
+
 // post images upload for profile picture
-app.post('/images', upload.single('image'), (req, res, next) => {
+app.post('/images',removeUserProfileImage, upload.single('image'), (req, res, next) => {
   var obj = {
       byUser : req.body.byUser,
       name: req.body.name,
@@ -256,6 +270,21 @@ app.post('/postImages', upload.single('image'), (req, res, next) => {
         )
       }
 );
+
+
+app.post('/removeUserImage', removeUserProfileImage);
+
+
+const removeImage=(file)=>{
+  const fileName=file;
+  const directoryPath= "./uploads/";
+  try{
+    fs.unlinkSync(directoryPath + fileName);
+    console.log("Delete File successfully.");
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 /* <-------------- ERROR HANDLING ----------> */
