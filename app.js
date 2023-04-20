@@ -164,6 +164,7 @@ app.get('/currentUser',(req,res,next)=>{
   }
 });
 
+// limit file size too 500kb
   const limits= {fileSize : 0.5 * 1024 * 1024}
   
 var upload = multer({ storage: storage, limits: limits ,fileFilter: function(_req, file, cb){
@@ -184,7 +185,7 @@ app.get('/images', (req, res) => {
 });
 
 function checkFileType(file, cb){
-  // Allowed ext
+  // Allowed ext file images
   const filetypes = /jpeg|jpg|png|gif|ico/;
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
@@ -210,8 +211,6 @@ const removeUserProfileImage=(req,res,next)=>{
       }
   }
 
-
-
 // post images upload for profile picture
 app.post('/images', upload.single('image'),removeUserProfileImage, (req, res, next) => {
   var obj = {
@@ -223,8 +222,7 @@ app.post('/images', upload.single('image'),removeUserProfileImage, (req, res, ne
           data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
           contentType: 'image/png'
       }
-  }/* console.log(fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename))) */
-  
+  }
   var userImgUrl = {
     profilePicture :  req.file.filename,
   }
@@ -260,7 +258,6 @@ app.get('/images/:email', (req, res) => {
          res.json(
            (items[items.length-1]).img.data.toString('base64') 
          )
-         //res.render('imagesPage', { items: items });
       } 
   });
 });
@@ -273,7 +270,6 @@ app.post('/postImages', upload.single('image'), (req, res, next) => {
     imageContent :  req.file.filename,
     text : req.body.text
   })
- 
         postImageUrl.save((err)=>{
          if(err){
            return next(err);
@@ -286,9 +282,6 @@ app.post('/postImages', upload.single('image'), (req, res, next) => {
         )
       }
 );
-
-
-app.post('/removeUserImage', removeUserProfileImage);
 
 
 const removeImage=(file)=>{

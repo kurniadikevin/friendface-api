@@ -776,13 +776,35 @@ paths:
         '400':
           description: Invalid 
       parameters:
-        parameters:
         - name: postId
           in: path
           description: postId of the post needed
           required: true
           schema:
             type: string
+      requestBody:
+        description:  Comment content, author information, and post Id that commented
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: post id
+                  commentBy:
+                      type: object
+                      properties:
+                        _id: 
+                          type: string
+                        email: 
+                          type: string
+                        username:
+                          type: string
+                  text:
+                    type: string  
+                    description: text content of comment
+
 
   /userChat/all:
     get:
