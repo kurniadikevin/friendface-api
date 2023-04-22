@@ -18,9 +18,6 @@ const User= require('../models/users');
         return next(err);
       }
       console.log('comment posted')
-     /*  res
-        .status(200)
-        .end() */
         next()
     });
   }); 
@@ -42,6 +39,9 @@ const User= require('../models/users');
         }
         const authorId= (result[0].author).valueOf();
         console.log(authorId);
+        //if authorId not same as req.body.commentBy._id
+
+        if(authorId !== (req.body.commentBy)._id){
          // push notification to author postNotification
         User.findByIdAndUpdate(authorId,{$addToSet : {postNotification : notifObj}},
         (err,post)=>{
@@ -53,6 +53,9 @@ const User= require('../models/users');
           res
           .status(200)
           .end()
-        })
+        })} else{
+          console.log('notification not pushed because you comment your own post')
+          res.sendStatus(200)
+        }
       })  
   }

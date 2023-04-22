@@ -3,7 +3,7 @@ info:
   title: Friendface-API v1
   version: 0.1.0
   description: |-
-    This API is used for [Friendface](https://friendface.vercel.app/) social media project with use case of doing CRUD to database and store image file. 
+    This API is used for [Friendface](http://localhost:3000/) social media project with use case of doing CRUD to database and store image file. 
 
     The API handle some social media schema including post, comment, like, user, userChat, messages, notification, messages notification, and chat room.
     
@@ -11,7 +11,7 @@ info:
     
     _Some related link:_
     - [Friendface-client repository](https://github.com/kurniadikevin/friendface-client)
-    - [Friendface App](https://friendface.vercel.app/)
+    - [Friendface App](http://localhost:3000/)
     - [Developer](https://github.com/kurniadikevin)
     
  
@@ -776,13 +776,35 @@ paths:
         '400':
           description: Invalid 
       parameters:
-        parameters:
         - name: postId
           in: path
           description: postId of the post needed
           required: true
           schema:
             type: string
+      requestBody:
+        description:  Comment content, author information, and post Id that commented
+        content:
+          application/json:
+             schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: post id
+                  commentBy:
+                      type: object
+                      properties:
+                        _id: 
+                          type: string
+                        email: 
+                          type: string
+                        username:
+                          type: string
+                  text:
+                    type: string  
+                    description: text content of comment
+
 
   /userChat/all:
     get:

@@ -43,8 +43,8 @@ const userChatRouter = require('./routes/userChat');
 var app = express();
 
 app.use(cors({
-   origin : 'https://friendface.vercel.app',
-   
+  /* origin : 'http://localhost:3000', */
+  origin : ['http://localhost:3000','https://editor.swagger.io','http://127.0.0.1:3000'],
   credentials : true
 }));
 
@@ -162,7 +162,12 @@ app.get('/currentUser',(req,res,next)=>{
   }
 });
 
-var upload = multer({ storage: storage });
+// limit file size too 500kb
+  const limits= {fileSize : 0.5 * 1024 * 1024}
+  
+var upload = multer({ storage: storage, limits: limits ,fileFilter: function(_req, file, cb){
+  checkFileType(file, cb);
+  }});
 
 //get all images in upload
 app.get('/images', (req, res) => {
@@ -177,8 +182,35 @@ app.get('/images', (req, res) => {
   });
 });
 
+function checkFileType(file, cb){
+  // Allowed ext file images
+  const filetypes = /jpeg|jpg|png|gif|ico/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null, true);
+  } else {
+    return cb(null, false);
+  }
+}
+
+const removeUserProfileImage=(req,res,next)=>{
+  console.log(req.user);
+      if(req.user?.profilePicture){
+      console.log('delete');
+      removeImage(req.user.profilePicture);
+      next()
+      } else{
+        console.log('no profile picture found');
+        next()
+      }
+  }
+
 // post images upload for profile picture
-app.post('/images', upload.single('image'), (req, res, next) => {
+app.post('/images', upload.single('image'),removeUserProfileImage, (req, res, next) => {
   var obj = {
       byUser : req.body.byUser,
       name: req.body.name,
@@ -188,12 +220,9 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
           contentType: 'image/png'
       }
-  }/* console.log(fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename))) */
-  
+  }
   var userImgUrl = {
-    
     profilePicture :  req.file.filename,
-   
   }
   imgModel.create(obj, (err, item) => {
       if (err) {
@@ -208,8 +237,12 @@ app.post('/images', upload.single('image'), (req, res, next) => {
           else {
                //item.save();
                console.log('updated');
-               res.redirect('https://friendface.vercel.app/profile');
+<<<<<<< HEAD
+               res.redirect('http://localhost:3000/profile');
               
+=======
+               res.redirect('http://localhost:3000/profile');         
+>>>>>>> localdev
           }
       }); 
       }
@@ -228,7 +261,6 @@ app.get('/images/:email', (req, res) => {
          res.json(
            (items[items.length-1]).img.data.toString('base64') 
          )
-         //res.render('imagesPage', { items: items });
       } 
   });
 });
@@ -241,7 +273,6 @@ app.post('/postImages', upload.single('image'), (req, res, next) => {
     imageContent :  req.file.filename,
     text : req.body.text
   })
- 
         postImageUrl.save((err)=>{
          if(err){
            return next(err);
@@ -254,6 +285,18 @@ app.post('/postImages', upload.single('image'), (req, res, next) => {
         )
       }
 );
+
+
+const removeImage=(file)=>{
+  const fileName=file;
+  const directoryPath= "./uploads/";
+  try{
+    fs.unlinkSync(directoryPath + fileName);
+    console.log("Delete File successfully.");
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 /* <-------------- ERROR HANDLING ----------> */
