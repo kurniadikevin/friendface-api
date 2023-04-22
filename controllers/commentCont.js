@@ -18,9 +18,6 @@ const User= require('../models/users');
         return next(err);
       }
       console.log('comment posted')
-     /*  res
-        .status(200)
-        .end() */
         next()
     });
   }); 
