@@ -64,7 +64,7 @@ router.get('/auth/facebook', passport.authenticate('facebook', {
 
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
-    successRedirect: 'http://localhost:3000/',
+    successRedirect: 'https://friendface.vercel.app/',
     failureRedirect: '/error'
   }));
 
