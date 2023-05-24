@@ -29,13 +29,13 @@ router.get('/:userId/count',posts_controller.user_post_count);
 
 //*
 //create new post
-router.post('/newpost',middelware_controller.verifyToken, middelware_controller.jwtVerify ,posts_controller.create_new_post);
+router.post('/newpost',middelware_controller.verifyToken ,posts_controller.create_new_post);
 
 // post delete specific post
-router.post('/delete/:postId',posts_controller.post_detail_delete);
+router.post('/delete/:postId',middelware_controller.verifyToken,posts_controller.post_detail_delete);
 
 // post like post
-router.post('/likes/:postId',posts_controller.update_post_likes, posts_controller.push_notification_like); 
+router.post('/likes/:postId'/* ,middelware_controller.verifyToken, posts_controller.update_post_likes */, posts_controller.push_notification_like); 
 
 
 module.exports = router;

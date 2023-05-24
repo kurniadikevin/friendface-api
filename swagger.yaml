@@ -317,6 +317,18 @@ paths:
         description: Like specific post using postId
         operationId: LikePostById
         requestBody:
+          description: Create a new post with text and authorId on author
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    id:
+                      type: string
+                    username:
+                      type: string
         content:
           application/json:
              schema:
@@ -325,12 +337,22 @@ paths:
                   userId:
                     type: string
         responses:
-          '200':
-            description: Post sucessfully liked
-            content:
-              application/json:
-                schema: 
-                  type: array       
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+             schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: testing@gmail.com 
+                  id:
+                    type: string 
+                    example: (insert author id)
+                  username:
+                    type: string 
+                    example: testinguser    
           '400':
             description: Error delete
         parameters:
