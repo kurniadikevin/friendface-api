@@ -12,6 +12,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 var json= require('body-parser');
+const jwt = require('jsonwebtoken');
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yaml')
@@ -136,14 +137,28 @@ app.get('/users/login',(req,res)=>{
   res.json('login get loaded')
 })
 
-app.post("/users/login", (req, res, next) => {
+const jwtTokenMiddleware=(req,res,next)=>{
+  const user ={
+    email : req.body.email,
+    password : req.body.password
+  }
+  jwt.sign({user},'secretkey',(err,token)=>{
+  //console.log(token)
+  res.locals.token= {token}
+  })
+  next()
+}
+
+app.post("/users/login",jwtTokenMiddleware, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
     if (!user) res.send("No User Exists");
     else {
       req.logIn(user, (err) => {
         if (err) throw err;
-        res.send(req.user);
+        const info= req.user;
+        console.log(res.locals.token)// cannot assign token to data
+        res.send({info,...res.locals.token});
       });
     }
   })(req, res, next);
@@ -151,7 +166,6 @@ app.post("/users/login", (req, res, next) => {
 
 app.get('/currentUser',(req,res,next)=>{
   res.send(req.user)
- 
 })
 
 /* <-----------multer for image models management-----------------> */

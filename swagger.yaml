@@ -19,6 +19,10 @@ info:
 servers:
   - url: http://localhost:5000
 tags:
+
+  - name: authentication 
+    description: Operation for user session
+
   - name: posts
     description: Operation for posts route
     
@@ -41,6 +45,7 @@ tags:
     description: Operation for storing image on API from few different endpoint
 
 paths:
+
   /posts:
     get:
       tags:
