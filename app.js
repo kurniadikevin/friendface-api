@@ -64,6 +64,10 @@ app.set('view engine', 'pug');
 
 //app.use(compression());
 //app.use(helmet());
+
+//test middleware sample middleware
+//app.use((req,res,next)=>{console.log('hello'); next()})
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -137,6 +141,7 @@ app.get('/users/login',(req,res)=>{
   res.json('login get loaded')
 })
 
+// middleware for generating bearer token
 const jwtTokenMiddleware=(req,res,next)=>{
   const user ={
     email : req.body.email,
@@ -159,6 +164,21 @@ app.post("/users/login",jwtTokenMiddleware, (req, res, next) => {
         const info= req.user;
         console.log(res.locals.token)// cannot assign token to data
         res.send({info,...res.locals.token});
+      });
+    }
+  })(req, res, next);
+});
+
+// refresh loggin session without generate token
+app.post("/users/relogin", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) throw err;
+    if (!user) res.send("No User Exists");
+    else {
+      req.logIn(user, (err) => {
+        if (err) throw err;
+        const info= req.user;
+        res.send({info});
       });
     }
   })(req, res, next);

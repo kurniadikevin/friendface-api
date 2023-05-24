@@ -167,6 +167,10 @@ exports.post_list = (req, res,next) => {
   //POST create new post 
   exports.create_new_post= (req,res,next)=>{
 
+    if(!req.body.text || !req.body.authorId){
+      res.sendStatus(400)
+    }
+
     const posts = new Post({
         text : req.body.text,
         author : req.body.authorId
@@ -174,6 +178,8 @@ exports.post_list = (req, res,next) => {
     posts.save(err=>{
       if(err){
         return next(err);
+      } else{
+        res.sendStatus(200)
       }
     })
   }
