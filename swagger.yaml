@@ -18,6 +18,12 @@ info:
 
 servers:
   - url: http://localhost:5000
+
+
+# Apply the security globally to all operations
+security:
+  - bearerAuth: []
+
 tags:
 
   - name: authentication 
@@ -44,8 +50,9 @@ tags:
   - name : images
     description: Operation for storing image on API from few different endpoint
 
-paths:
 
+
+paths:
   /posts:
     get:
       tags:
@@ -283,7 +290,13 @@ paths:
                     type: string 
                     example: (insert author id)  
         '400':
-          description: Invalid 
+          description: Invalid
+      securitySchemes:
+        app_id:
+          type: apiKey
+          description: API key to authorize requests.
+          name: appid
+          in: query 
 
   /posts/delete/{postId}:
       post:
@@ -548,7 +561,7 @@ paths:
   /users/login:
     post:
       tags:
-        - users
+        - authentication
       summary: Login user
       description: Login user with email and password
       operationId: loginUser
@@ -569,6 +582,13 @@ paths:
           description: Successful operation user logged-in
           content:
             application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: object
+                  token:
+                    type: object
         '400':
           description: Invalid
 
@@ -1286,6 +1306,13 @@ paths:
 
 
 components:
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+
   schemas:
     Posts:
       required:

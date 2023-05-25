@@ -162,7 +162,6 @@ app.post("/users/login",jwtTokenMiddleware, (req, res, next) => {
       req.logIn(user, (err) => {
         if (err) throw err;
         const info= req.user;
-        console.log(res.locals.token)// cannot assign token to data
         res.send({info,...res.locals.token});
       });
     }
