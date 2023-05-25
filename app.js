@@ -65,9 +65,6 @@ app.set('view engine', 'pug');
 //app.use(compression());
 //app.use(helmet());
 
-//test middleware sample middleware
-//app.use((req,res,next)=>{console.log('hello'); next()})
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -113,7 +110,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 //user authentication and sign up
-app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.PASSPORT_SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
@@ -147,7 +144,7 @@ const jwtTokenMiddleware=(req,res,next)=>{
     email : req.body.email,
     password : req.body.password
   }
-  jwt.sign({user},'secretkey',(err,token)=>{
+  jwt.sign({user},process.env.JWT_BEARER_SECRETKEY ,(err,token)=>{
   //console.log(token)
   res.locals.token= {token}
   })

@@ -35,7 +35,8 @@ router.post('/newpost',middelware_controller.verifyToken ,posts_controller.creat
 router.post('/delete/:postId',middelware_controller.verifyToken,posts_controller.post_detail_delete);
 
 // post like post
-router.post('/likes/:postId',middelware_controller.verifyToken, posts_controller.push_notification_like); 
+router.post('/likes/:postId',middelware_controller.verifyToken, posts_controller.update_post_likes,
+ posts_controller.push_notification_like); 
 
 
 module.exports = router;

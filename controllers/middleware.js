@@ -15,7 +15,7 @@ exports.verifyToken =(req,res,next)=>{
         req.token = bearerToken;
         
         //next middleweare
-        jwt.verify(req.token,'secretkey',(err)=>{
+        jwt.verify(req.token,process.env.JWT_BEARER_SECRETKEY,(err)=>{
             if(err)
                 res.sendStatus(403);
             else{
