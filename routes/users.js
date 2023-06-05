@@ -2,6 +2,8 @@ var express = require('express');
 var passport = require('passport')
 var router = express.Router();
 const users_controller= require('../controllers/usersCont');
+const middelware_controller= require('../controllers/middleware');
+
 
 /* GET users listing. */
 router.get('/', users_controller.get_user_all);
@@ -28,24 +30,25 @@ router.get('/profilePicture/:userId', users_controller.get_user_profile_picture_
 router.post('/signup',users_controller.post_new_user);
 
 //POSTT update user username
-router.post('/update/:userId',users_controller.put_update_username)
+router.post('/update/:userId',middelware_controller.verifyToken,users_controller.put_update_username)
 
 //PUT update user profilePicure
-router.post('/update/profilePicture/:userId',users_controller.put_update_user_profilePicture);
+router.post('/update/profilePicture/:userId',middelware_controller.verifyToken,users_controller.put_update_user_profilePicture);
 
 //POST make friend request
-router.post('/friendRequest/:userId',users_controller.post_user_friend_request);
+router.post('/friendRequest/:userId',middelware_controller.verifyToken,users_controller.post_user_friend_request);
 
 //POST accept friend request
-router.post('/friendRequest/accept/:userId',users_controller.post_accept_friend_request);
+router.post('/friendRequest/accept/:userId',middelware_controller.verifyToken,users_controller.post_accept_friend_request);
 
 //POST decline friend request
-router.post('/friendRequest/decline/:userId',users_controller.post_decline_friend_request);
+router.post('/friendRequest/decline/:userId',middelware_controller.verifyToken,users_controller.post_decline_friend_request);
 
 //POST clear notification unseen
-router.post('/seenNotification/:userId',users_controller.post_seenAt_notification_update);
+router.post('/seenNotification/:userId',middelware_controller.verifyToken,users_controller.post_seenAt_notification_update);
 
 //POST clear friendRequest notif unseen
+<<<<<<< HEAD
 router.post('/seenFriendReqNotif/:userId',users_controller.friendRequest_seenAt_notification_update);
 
 
@@ -72,13 +75,11 @@ router.get('/fb/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });
+=======
+router.post('/seenFriendReqNotif/:userId',middelware_controller.verifyToken,users_controller.friendRequest_seenAt_notification_update);
+>>>>>>> localdev-bearer
 
 
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated())
-    return next();
-  res.redirect('/');
-}
 
 
 module.exports = router;

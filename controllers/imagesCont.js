@@ -14,8 +14,26 @@ var storage = multer.diskStorage({
     }
   });
 
-  var upload = multer({ storage: storage });
+  // limit file size too 500kb
+  const limits= {fileSize : 0.5 * 1024 * 1024}
 
+  var upload = multer({ storage: storage, limits: limits ,fileFilter: function(_req, file, cb){
+    checkFileType(file, cb);
+    }});
+
+function checkFileType(file, cb){
+  // Allowed ext file images
+  const filetypes = /jpeg|jpg|png|gif|ico/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+  if(mimetype && extname){
+    return cb(null, true);
+  } else {
+    return cb(null, false);
+  }
+}
 
 exports.get_all_image=(req, res) => {
   imgModel.find({}, (err, items) => {

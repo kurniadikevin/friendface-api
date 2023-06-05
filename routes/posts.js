@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const posts_controller = require('../controllers/postsCont');
+const middelware_controller= require('../controllers/middleware');
 
 // get all post
 router.get('/',posts_controller.post_list);
@@ -26,15 +27,16 @@ router.get('/byUser/:userId/page/:pageNumber', posts_controller.user_post_list_p
 //get profile user post count
 router.get('/:userId/count',posts_controller.user_post_count);
 
-
+//*
 //create new post
-router.post('/newpost',posts_controller.create_new_post);
+router.post('/newpost',middelware_controller.verifyToken ,posts_controller.create_new_post);
 
 // post delete specific post
-router.post('/delete/:postId',posts_controller.post_detail_delete);
+router.post('/delete/:postId',middelware_controller.verifyToken,posts_controller.post_detail_delete);
 
 // post like post
-router.post('/likes/:postId',posts_controller.update_post_likes, posts_controller.push_notification_like); 
+router.post('/likes/:postId',middelware_controller.verifyToken, posts_controller.update_post_likes,
+ posts_controller.push_notification_like); 
 
 
 module.exports = router;

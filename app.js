@@ -12,6 +12,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 var json= require('body-parser');
+const jwt = require('jsonwebtoken');
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yaml')
@@ -59,6 +60,8 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+//app.use(compression());
+//app.use(helmet());
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -105,7 +108,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 //user authentication and sign up
-app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.PASSPORT_SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
@@ -133,14 +136,43 @@ app.get('/users/login',(req,res)=>{
   res.json('login get loaded')
 })
 
-app.post("/users/login", (req, res, next) => {
+// middleware for generating bearer token
+const jwtTokenMiddleware=(req,res,next)=>{
+  const user ={
+    email : req.body.email,
+    password : req.body.password
+  }
+  jwt.sign({user},process.env.JWT_BEARER_SECRETKEY ,(err,token)=>{
+  //console.log(token)
+  res.locals.token= {token}
+  })
+  next()
+}
+
+app.post("/users/login",jwtTokenMiddleware, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
     if (!user) res.send("No User Exists");
     else {
       req.logIn(user, (err) => {
         if (err) throw err;
-        res.send(req.user);
+        const info= req.user;
+        res.send({info,...res.locals.token});
+      });
+    }
+  })(req, res, next);
+});
+
+// refresh loggin session without generate token
+app.post("/users/relogin", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) throw err;
+    if (!user) res.send("No User Exists");
+    else {
+      req.logIn(user, (err) => {
+        if (err) throw err;
+        const info= req.user;
+        res.send({info});
       });
     }
   })(req, res, next);
@@ -148,7 +180,6 @@ app.post("/users/login", (req, res, next) => {
 
 app.get('/currentUser',(req,res,next)=>{
   res.send(req.user)
- 
 })
 
 /* <-----------multer for image models management-----------------> */
