@@ -48,36 +48,7 @@ router.post('/friendRequest/decline/:userId',middelware_controller.verifyToken,u
 router.post('/seenNotification/:userId',middelware_controller.verifyToken,users_controller.post_seenAt_notification_update);
 
 //POST clear friendRequest notif unseen
-<<<<<<< HEAD
-router.post('/seenFriendReqNotif/:userId',users_controller.friendRequest_seenAt_notification_update);
-
-
-  /* <------------------------FACEBOOK AUTHENTICATION ------------------> */
-router.get('/fb/profile', isLoggedIn, function (req, res) {
-  res.send(req.user)
-});
-
-router.get('/fb/error', isLoggedIn, function (req, res) {
-  res.send('pages/error');
-});
-
-router.get('/auth/facebook', passport.authenticate('facebook', {
-  scope:['password', 'email']
-}));
-
-router.get('/auth/facebook/callback',
-  passport.authenticate('facebook', {
-    successRedirect: 'https://friendface.vercel.app/',
-    failureRedirect: '/error'
-  }));
-
-router.get('/fb/logout', function (req, res) {
-  req.logout();
-  res.redirect('/');
-});
-=======
 router.post('/seenFriendReqNotif/:userId',middelware_controller.verifyToken,users_controller.friendRequest_seenAt_notification_update);
->>>>>>> localdev-bearer
 
 
 

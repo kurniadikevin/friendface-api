@@ -23,7 +23,6 @@ servers:
     description: old url name
   - url : http://localhost:5000
     description: local for testing
-  - url: http://localhost:5000
 
 
 # Apply the security globally to all operations
