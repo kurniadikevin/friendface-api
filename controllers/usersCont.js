@@ -323,3 +323,29 @@ exports.friendRequest_seenAt_notification_update=((req,res,next)=>{
       });
   }) 
 });
+
+
+exports.removeFriendFromList=((req,res,next)=>{
+  //params.userId, body.targetUserId
+
+//remove from current user friend list
+  User.findByIdAndUpdate(req.params.userId,{$pull : {friends : {_id : {$eq : req.body.targetUserId}}}},
+    (err,post)=>{
+    if(err){
+      return next(err);
+    }
+    console.log('removed friend from current user list')
+    //remove from target user friend list
+  User.findByIdAndUpdate(req.body.targetUserId,{$pull : {friends : {_id : {$eq : req.params.userId}}}},
+    (err,post)=>{
+    if(err){
+      return next(err);
+    }
+    console.log('removed friend from target user list')
+    res.send({
+      message : 'friend removed from both target user and current user friend list'
+    })
+  })
+
+  })
+})

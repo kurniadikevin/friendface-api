@@ -50,7 +50,8 @@ router.post('/seenNotification/:userId',middelware_controller.verifyToken,users_
 //POST clear friendRequest notif unseen
 router.post('/seenFriendReqNotif/:userId',middelware_controller.verifyToken,users_controller.friendRequest_seenAt_notification_update);
 
-
+//POST remove friend list
+router.post('/removeFriendList/:userId', middelware_controller.verifyToken, users_controller.removeFriendFromList);
 
 
 module.exports = router;
