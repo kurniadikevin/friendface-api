@@ -207,7 +207,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
     } else{
     console.log('friend request removed')
 
-   //add friend list to receiver
+   //add friend list to receiver  xx
   User.findByIdAndUpdate(req.params.userId,{$addToSet : {friends : req.body.newFriend}},
     (err,post)=>{
     if(err){
@@ -215,7 +215,7 @@ exports.post_accept_friend_request=((req,res,next)=>{
     } else{
     console.log('friend list added to receiver');
  
-    //add friend list to sender
+    //add friend list to sender 
   User.findByIdAndUpdate(req.body.newFriend._id,{$addToSet : {friends : req.body.newFriendReceiver}},
       (err,post)=>{
       if(err){

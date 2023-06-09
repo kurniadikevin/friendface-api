@@ -6,8 +6,8 @@ const Schema= mongoose.Schema;
 const UserSchema= new Schema({
     username : {type : String},
     email : {type : String , required:true}, 
-    password : { type: String, required: true},
-    friends : { type:Array  },
+    password : { type: String, required: true },
+    friends : { type:Array},
     profilePicture : {type:String },
     friendRequest : {type:Array},
     postNotification : {type:Array}
