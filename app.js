@@ -44,7 +44,7 @@ const userChatRouter = require('./routes/userChat');
 var app = express();
 
 app.use(cors({
-  origin : 'https://friendface.vercel.app',
+  origin : ['https://friendface.vercel.app','http://localhost:3000'],
   credentials : true
 }));
 
