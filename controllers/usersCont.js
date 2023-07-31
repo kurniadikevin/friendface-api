@@ -260,7 +260,7 @@ exports.get_user_profile_picture_byId=((req,res,next)=>{
           next(err);
       }
       //sucess
-      res.redirect(`https://friendface-api-production.up.railway.app/${imageName}`)
+      res.redirect(`https://encouraging-pig-cuff-links.cyclic.cloud/${imageName}`)
   })
 })
 
