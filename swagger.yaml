@@ -17,12 +17,10 @@ info:
  
 
 servers:
-  - url : https://friendface-api-production.up.railway.app
-    description: current url server
-  - url: https://odin-book-api-production.up.railway.app
-    description: old url name
+  - url : https://encouraging-pig-cuff-links.cyclic.cloud
+    description: current url 
   - url : http://localhost:5000
-    description: local for testing
+    description: local url 
 
 
 # Apply the security globally to all operations
