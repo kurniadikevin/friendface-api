@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 const posts_controller = require('../controllers/postsCont');
 const middelware_controller= require('../controllers/middleware');
+const multer = require('multer');
+
+// Setting up multer as a middleware to grab photo uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage }).single('file');
+
 
 // get all post
 router.get('/',posts_controller.post_list);
@@ -37,6 +43,10 @@ router.post('/delete/:postId',middelware_controller.verifyToken,posts_controller
 // post like post
 router.post('/likes/:postId',middelware_controller.verifyToken, posts_controller.update_post_likes,
  posts_controller.push_notification_like); 
+
+// POST - Add Image to Cloud Storage
+router.post('/upload-test', upload, middelware_controller.addImage);
+
 
 
 module.exports = router;
